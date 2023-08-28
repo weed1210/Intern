@@ -1,5 +1,6 @@
 package dxc.assignment.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -33,7 +34,8 @@ public class HomeController {
 	@GetMapping("/")
 	public String index(ModelMap model,
 			@RequestParam("searchString") Optional<String> searchString,
-			@RequestParam("page") Optional<Integer> page, HttpSession session) {
+			@RequestParam("page") Optional<Integer> page, HttpSession session)
+			throws IOException {
 		session.setAttribute("searchString", searchString.orElse(""));
 		Page<Member> members = memberService
 				.select(searchString.orElse(""), page.orElse(1));

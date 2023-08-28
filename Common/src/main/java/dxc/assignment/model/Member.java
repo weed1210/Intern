@@ -1,5 +1,7 @@
 package dxc.assignment.model;
 
+import javax.json.bind.annotation.JsonbCreator;
+import javax.json.bind.annotation.JsonbProperty;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -24,7 +26,6 @@ public class Member {
 	private String role;
 
 	public Member(int id, String username, String email, String phoneNumber, String passwordHash, String role) {
-		super();
 		this.id = id;
 		this.username = username;
 		this.email = email;

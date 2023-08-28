@@ -54,9 +54,9 @@
 											</thead>
 											<tbody>
 
-												<c:forEach var="member" items="${members.content}">
+												<c:forEach var="member" items="${members.content}" varStatus="status">
 													<tr>
-														<td>${member.id }</td>
+														<td>${status.index+1 + members.size*members.number }</td>
 														<td>${member.username }</td>
 														<td>${member.email }</td>
 														<td>${member.phoneNumber }</td>

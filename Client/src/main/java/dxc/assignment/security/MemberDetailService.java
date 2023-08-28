@@ -1,5 +1,7 @@
 package dxc.assignment.security;
 
+import java.io.IOException;
+
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,11 +21,18 @@ public class MemberDetailService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException {
-		Member member = memberService.selectByEmail(username);
+		Member member;
+		try {
+			member = memberService.selectByEmail(username);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			throw new UsernameNotFoundException("User not found");
+		}
+
 		if (member == null) {
 			throw new UsernameNotFoundException("User not found");
 		}
-		
+
 		// Return the user detail which is set until logout
 		return User.builder()
 				.username(member.getEmail())

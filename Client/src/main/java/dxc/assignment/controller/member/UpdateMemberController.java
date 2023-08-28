@@ -1,5 +1,7 @@
 package dxc.assignment.controller.member;
 
+import java.io.IOException;
+
 import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -9,6 +11,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +41,7 @@ public class UpdateMemberController {
 	@GetMapping("/update/{id}")
 	public String update(@PathVariable int id, ModelMap model, HttpSession session,
 			RedirectAttributes redirectAttributes)
-			throws AuthException {
+			throws AuthException, IOException {
 		// Get the current user and updating user, check if updating an higher level
 		// member
 		String memberRole = (String) session.getAttribute("memberRole");
@@ -66,9 +70,11 @@ public class UpdateMemberController {
 		if (member.getPassword().isBlank()) {
 			// Check if there are errors in other field beside password
 			if (!ValidationHelper.hasErrorOnlyForField(bindingResult, "password")) {
+				System.out.println("1 Error");
 				return "update";
 			}
 		} else if (bindingResult.hasErrors()) {
+			System.out.println("2 Error");
 			return "update";
 		}
 
@@ -103,11 +109,17 @@ public class UpdateMemberController {
 
 	// Update the member
 	@PostMapping("/confirmUpdate")
-	public String confirmUpdate(@ModelAttribute("member") Member member) {
+	public String confirmUpdate(@ModelAttribute("member") Member member)
+			throws IOException {
 		// Encode the new member password before update
-		encoderHelper.encodeMemberPassword(member);
-		memberService.update(member);
+		try {
+			encoderHelper.encodeMemberPassword(member);
+			memberService.update(member);
 
-		return "redirect:/";
+			return "redirect:/";
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			throw e;
+		}
 	}
 }

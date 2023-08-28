@@ -1,5 +1,7 @@
 package dxc.assignment.controller.member;
 
+import java.io.IOException;
+
 import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -86,7 +88,7 @@ public class AddMemberController {
 	// Insert the new member
 	@PostMapping("/confirmRegister")
 	public String confirmRegister(@ModelAttribute("member") Member member,
-			ModelMap modelMap) {
+			ModelMap modelMap) throws IOException {
 		try {
 			// Encode the new member password before insert
 			encoderHelper.encodeMemberPassword(member);
@@ -94,10 +96,16 @@ public class AddMemberController {
 			memberService.insert(member);
 
 			return "redirect:/";
-		} catch (DuplicateKeyException e) {
-			modelMap.addAttribute("registerError",
-					"メールアドレス" + member.getEmail() + "はすでに存在しています");
-			return "register";
+		} 
+//		catch (DuplicateKeyException e) {
+//			modelMap.addAttribute("registerError",
+//					"メールアドレス" + member.getEmail() + "はすでに存在しています");
+//			return "register";
+//		} 
+		catch (IOException e) {
+			System.out.println(e);
+			System.out.println(e.getCause().getClass());
+			throw e;
 		} catch (Exception e) {
 			System.out.println(e.getClass().getCanonicalName());
 			System.out.println(e.getMessage());

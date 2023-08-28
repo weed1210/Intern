@@ -1,5 +1,6 @@
 package dxc.assignment.controller.member;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 
 import javax.security.auth.message.AuthException;
@@ -30,14 +31,16 @@ public class DeleteMemberController {
 	// Display the confirmation page for deleting
 	@GetMapping("/confirmDelete/{id}")
 	public String confirmDelete(@PathVariable int id, ModelMap model,
-			HttpSession session, RedirectAttributes redirectAttributes) throws AuthException {
-		// Get the current user and deleting user, check if deleting an higher level member
+			HttpSession session, RedirectAttributes redirectAttributes)
+			throws AuthException, IOException {
+		// Get the current user and deleting user, check if deleting an higher level
+		// member
 		String memberRole = (String) session.getAttribute("memberRole");
 		Member member = memberService.selectById(id);
 		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
 			throw new AuthException();
 		}
-		
+
 		if (member == null) {
 			redirectAttributes.addFlashAttribute("getInfoError",
 					"idが" + id + "のユーザーは存在しません。");
@@ -52,12 +55,17 @@ public class DeleteMemberController {
 		return "confirm";
 	}
 
-	
 	// Delete the member
 	@PostMapping("/confirmDelete/{id}")
-	public String confirmRegister(@PathVariable int id) {
-		memberService.delete(id);
+	public String confirmRegister(@PathVariable int id) throws IOException {
+		try {
+			memberService.delete(id);
 
-		return "redirect:/";
+			return "redirect:/";
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			throw e;
+		}
+
 	}
 }
