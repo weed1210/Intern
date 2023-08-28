@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "dxc.assignment")
+@ComponentScan(basePackages = "dxc.assignment.controller")
 public class Application {
 
 }
