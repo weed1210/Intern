@@ -2,13 +2,8 @@ package dxc.assignment.controller;
 
 import java.util.List;
 
-import javax.ws.rs.DELETE;
-
-import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.session.RowBounds;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +33,8 @@ public class MemberController {
 		List<Member> members = memberMapper.select(searchString,
 				new RowBounds(pageSize * (currentPage - 1), pageSize));
 		int totalCount = memberMapper.countMembers(searchString);
+		System.out.println(searchString);
+		System.out.println(totalCount);
 		return new MemberSelectResponse(members, totalCount);
 	}
 	
