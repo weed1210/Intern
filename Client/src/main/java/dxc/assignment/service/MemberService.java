@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import dxc.assignment.client.MemberClient;
-import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.response.MemberSelectResponse;
 import retrofit2.Retrofit;
@@ -18,11 +17,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Service
 public class MemberService {
 	private int pageSize = 10;
-	private final MemberMapper memberMapper;
 	private final MemberClient memberClient;
 
-	public MemberService(MemberMapper memberMapper) {
-		this.memberMapper = memberMapper;
+	public MemberService() {
 		Retrofit retrofit = new Retrofit.Builder()
 				.baseUrl("http://localhost:9090/Application/")
 				.addConverterFactory(GsonConverterFactory.create())
