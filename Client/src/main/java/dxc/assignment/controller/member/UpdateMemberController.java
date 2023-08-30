@@ -3,7 +3,6 @@ package dxc.assignment.controller.member;
 import java.io.IOException;
 
 import javax.security.auth.message.AuthException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -11,8 +10,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,10 +39,11 @@ public class UpdateMemberController {
 	public String update(@PathVariable int id, ModelMap model, HttpSession session,
 			RedirectAttributes redirectAttributes)
 			throws AuthException, IOException {
+		String authHeader = (String) session.getAttribute("authHeader");
 		// Get the current user and updating user, check if updating an higher level
 		// member
 		String memberRole = (String) session.getAttribute("memberRole");
-		Member member = memberService.selectById(id);
+		Member member = memberService.selectById(id, authHeader);
 		// If member not exist redirect to index and display toast
 		if (member == null) {
 			redirectAttributes.addFlashAttribute("getInfoError",
@@ -109,12 +107,14 @@ public class UpdateMemberController {
 
 	// Update the member
 	@PostMapping("/confirmUpdate")
-	public String confirmUpdate(@ModelAttribute("member") Member member)
+	public String confirmUpdate(@ModelAttribute("member") Member member, HttpSession session)
 			throws IOException {
+		String authHeader = (String) session.getAttribute("authHeader");
+		
 		// Encode the new member password before update
 		try {
 			encoderHelper.encodeMemberPassword(member);
-			memberService.update(member);
+			memberService.update(member,authHeader);
 
 			return "redirect:/";
 		} catch (IOException e) {

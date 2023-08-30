@@ -45,7 +45,6 @@ public class AuthController {
 		// Trả về jwt cho người dùng.
 		String jwt = jwtProvider
 				.generateToken((UserDetails) authentication.getPrincipal());
-		System.out.println("Jwt: " + jwt);
 		return new AuthenticateResponse(jwt);
 	}
 }

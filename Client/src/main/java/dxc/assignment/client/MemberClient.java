@@ -19,18 +19,19 @@ public interface MemberClient {
 			@Header("Authorization") String authHeader);
 
 	@GET("members/id/{id}")
-	Call<Member> selectById(@Path("id") int id);
+	Call<Member> selectById(@Path("id") int id,
+			@Header("Authorization") String authHeader);
 
 	@GET("members/email/{email}")
 	Call<Member> selectByEmail(@Path("email") String email,
 			@Header("Authorization") String authHeader);
 
 	@POST("members")
-	Call<Void> insert(@Body Member member);
+	Call<Void> insert(@Body Member member, @Header("Authorization") String authHeader);
 
 	@PUT("members")
-	Call<Void> update(@Body Member member);
+	Call<Void> update(@Body Member member, @Header("Authorization") String authHeader);
 
 	@DELETE("members/{id}")
-	Call<Void> delete(@Path("id") int id);
+	Call<Void> delete(@Path("id") int id, @Header("Authorization") String authHeader);
 }

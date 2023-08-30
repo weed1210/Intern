@@ -1,9 +1,6 @@
 package dxc.assignment.service;
 
 import java.io.IOException;
-import java.util.Collections;
-
-import javax.servlet.http.HttpSession;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,7 +11,6 @@ import dxc.assignment.client.MemberClient;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.response.MemberSelectResponse;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 @Service
 public class MemberService {
@@ -36,23 +32,23 @@ public class MemberService {
 		return paginatedMember;
 	}
 
-	public Member selectById(int id) throws IOException {
-		return memberClient.selectById(id).execute().body();
+	public Member selectById(int id, String authHeader) throws IOException {
+		return memberClient.selectById(id, authHeader).execute().body();
 	}
 
 	public Member selectByEmail(String email, String authHeader) throws IOException {
 		return memberClient.selectByEmail(email, authHeader).execute().body();
 	}
 
-	public void insert(Member member) throws IOException {
-		memberClient.insert(member).execute();
+	public void insert(Member member, String authHeader) throws IOException {
+		memberClient.insert(member, authHeader).execute();
 	}
 
-	public void update(Member member) throws IOException {
-		memberClient.update(member).execute();
+	public void update(Member member, String authHeader) throws IOException {
+		memberClient.update(member, authHeader).execute();
 	}
 
-	public void delete(int id) throws IOException {
-		memberClient.delete(id).execute();
+	public void delete(int id, String authHeader) throws IOException {
+		memberClient.delete(id, authHeader).execute();
 	}
 }

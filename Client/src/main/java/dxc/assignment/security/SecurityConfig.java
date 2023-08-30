@@ -2,7 +2,6 @@ package dxc.assignment.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,16 +10,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import dxc.assignment.service.MemberService;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	private MemberService memberService;
 	private CustomAuthProvider authProvider;
 
-	public SecurityConfig(MemberService memberService, CustomAuthProvider authProvider) {
-		this.memberService = memberService;
+	public SecurityConfig(CustomAuthProvider authProvider) {
 		this.authProvider = authProvider;
 	}
 
@@ -31,15 +26,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //		authenticationManagerBuilder.authenticationProvider(authProvider);
 //		return authenticationManagerBuilder.build();
 //	}
-	
-	@Override
-	  protected void configure(AuthenticationManagerBuilder auth) {
-	      auth.authenticationProvider(authProvider);
 
-	      //We can register as many providers as we may have
-	      //auth.authenticationProvider(customProviderTwo);
-	      //auth.authenticationProvider(customProviderThree);
-	  }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) {
+		auth.authenticationProvider(authProvider);
+
+		// We can register as many providers as we may have
+		// auth.authenticationProvider(customProviderTwo);
+		// auth.authenticationProvider(customProviderThree);
+	}
 
 	// DI the brypt encoder bean, automatically encode the password from login
 	// request when compare

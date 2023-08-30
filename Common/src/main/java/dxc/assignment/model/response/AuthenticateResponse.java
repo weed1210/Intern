@@ -7,6 +7,10 @@ public class AuthenticateResponse {
 		super();
 		this.jwtToken = jwtToken;
 	}
+	
+	public AuthenticateResponse() {
+		super();
+	}
 
 	public String getJwtToken() {
 		return jwtToken;

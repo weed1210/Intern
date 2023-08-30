@@ -2,7 +2,7 @@ package controller.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -63,7 +63,7 @@ public class AddMemberControllerTest {
 	@Test
 	public void testGetRegister() throws Exception {
 		MvcResult result = mockMvc.perform(get("/register")
-				.with(user(MemberSecurityHelper.getAdminUser())))
+				.with(authentication(MemberSecurityHelper.getAdminUser())))
 				.andExpect(status().isOk())
 				.andExpect(view().name("register"))
 				.andReturn();
@@ -77,7 +77,7 @@ public class AddMemberControllerTest {
 	@Test
 	public void testPostRegisterInvalidRequestReturnRegister() throws Exception {
 		mockMvc.perform(post("/register")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.flashAttr("member", Member.getDefault()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("register"))
@@ -90,7 +90,7 @@ public class AddMemberControllerTest {
 		Member member = MemberSecurityHelper.getValidTestAdminMember();
 
 		MvcResult result = mockMvc.perform(post("/register")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.flashAttr("member", member)
 				.sessionAttr("memberRole", "ROLE_ADMIN"))
 				.andExpect(status().is3xxRedirection())
@@ -108,7 +108,7 @@ public class AddMemberControllerTest {
 
 		try {
 			mockMvc.perform(post("/register")
-					.with(user(MemberSecurityHelper.getAdminUser()))
+					.with(authentication(MemberSecurityHelper.getAdminUser()))
 					.flashAttr("member", member)
 					.sessionAttr("memberRole", "ROLE_EDIT"));
 		} catch (Exception e) {
@@ -120,7 +120,7 @@ public class AddMemberControllerTest {
 	@Test
 	public void testGetConfirmRegisterNoNewMemberRedirectRegister() throws Exception {
 		mockMvc.perform(get("/confirmRegister")
-				.with(user(MemberSecurityHelper.getAdminUser())))
+				.with(authentication(MemberSecurityHelper.getAdminUser())))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/register"))
 				.andReturn();
@@ -130,7 +130,7 @@ public class AddMemberControllerTest {
 	public void testGetConfirmRegisterValidNewMemberReturnConfirm() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		MvcResult result = mockMvc.perform(get("/confirmRegister")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("newMember", validTestMember))
 				.andExpect(status().isOk())
 				.andExpect(view().name("confirm"))
@@ -149,7 +149,7 @@ public class AddMemberControllerTest {
 	public void testGetCancelRegisterRedirectRegister() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		MvcResult result = mockMvc.perform(get("/cancelRegister")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("newMember", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/register"))
@@ -164,10 +164,10 @@ public class AddMemberControllerTest {
 	public void testPostConfirmRegisterDuplicateEmailReturnRegister() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		Mockito.doThrow(new DuplicateKeyException(""))
-				.when(memberService).insert(validTestMember);
+				.when(memberService).insert(validTestMember, "");
 
 		MvcResult result = mockMvc.perform(post("/confirmRegister")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.flashAttr("member", validTestMember))
 				.andExpect(status().isOk())
 				.andExpect(view().name("register"))
@@ -183,10 +183,10 @@ public class AddMemberControllerTest {
 			throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		Mockito.doThrow(new RuntimeException())
-				.when(memberService).insert(validTestMember);
+				.when(memberService).insert(validTestMember, "");
 
 		mockMvc.perform(post("/confirmRegister")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.flashAttr("member", validTestMember))
 				.andExpect(status().isOk())
 				.andExpect(view().name("register"));
@@ -196,7 +196,7 @@ public class AddMemberControllerTest {
 	public void testPostConfirmRegisterValidMemberRedirectIndex() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		mockMvc.perform(post("/confirmRegister")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"));

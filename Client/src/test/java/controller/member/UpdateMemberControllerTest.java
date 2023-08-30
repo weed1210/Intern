@@ -3,7 +3,7 @@ package controller.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -65,7 +65,7 @@ public class UpdateMemberControllerTest {
 		when(memberService.selectById(0)).thenReturn(null);
 
 		mockMvc.perform(get("/update/0")
-				.with(user(MemberSecurityHelper.getAdminUser())))
+				.with(authentication(MemberSecurityHelper.getAdminUser())))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"))
 				.andExpect(flash().attribute("getInfoError", "idが0のユーザーは存在しません。"))
@@ -78,7 +78,7 @@ public class UpdateMemberControllerTest {
 		
 		try {
 			mockMvc.perform(get("/update/1")
-					.with(user(MemberSecurityHelper.getEditUser()))
+					.with(authentication(MemberSecurityHelper.getEditUser()))
 					.sessionAttr("memberRole", "ROLE_EDIT"));
 		}
 		catch (NestedServletException e) {
@@ -92,7 +92,7 @@ public class UpdateMemberControllerTest {
 		when(memberService.selectById(1)).thenReturn(MemberSecurityHelper.getValidTestAdminMember());
 		
 		mockMvc.perform(get("/update/1")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("memberRole", "ROLE_ADMIN"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("update"));
@@ -105,7 +105,7 @@ public class UpdateMemberControllerTest {
 		invalidMember.setPassword("12345678");
 
 		mockMvc.perform(post("/update")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("memberRole", "ROLE_ADMIN")
 				.flashAttr("member", invalidMember))
 				.andExpect(status().isOk())
@@ -118,7 +118,7 @@ public class UpdateMemberControllerTest {
 		Member member = MemberSecurityHelper.getValidTestAdminMember();
 
 		MvcResult result = mockMvc.perform(post("/update")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("memberRole", "ROLE_ADMIN")
 				.flashAttr("member", member))
 				.andExpect(status().is3xxRedirection())
@@ -137,7 +137,7 @@ public class UpdateMemberControllerTest {
 		Member invalidMember = MemberSecurityHelper.getDefaultTestMember();
 
 		mockMvc.perform(post("/update")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("memberRole", "ROLE_ADMIN")
 				.flashAttr("member", invalidMember))
 				.andExpect(status().isOk())
@@ -151,7 +151,7 @@ public class UpdateMemberControllerTest {
 		member.setPassword("");
 
 		MvcResult result = mockMvc.perform(post("/update")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("memberRole", "ROLE_ADMIN")
 				.flashAttr("member", member))
 				.andExpect(status().is3xxRedirection())
@@ -167,7 +167,7 @@ public class UpdateMemberControllerTest {
 	@Test
 	public void testGetConfirmUpdateNoEditingMemberRedirectIndex() throws Exception {
 		mockMvc.perform(get("/confirmUpdate")
-				.with(user(MemberSecurityHelper.getAdminUser())))
+				.with(authentication(MemberSecurityHelper.getAdminUser())))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"))
 				.andReturn();
@@ -177,7 +177,7 @@ public class UpdateMemberControllerTest {
 	public void testGetConfirmUpdateValidEditingMemberReturnConfirm() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		MvcResult result = mockMvc.perform(get("/confirmUpdate")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("editingMember", validTestMember))
 				.andExpect(status().isOk())
 				.andExpect(view().name("confirm"))
@@ -197,7 +197,7 @@ public class UpdateMemberControllerTest {
 	public void testGetCancelUpdateRedirectUpdate() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		MvcResult result = mockMvc.perform(get("/cancelUpdate/" + validTestMember.getId())
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("editingMember", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/update/" + validTestMember.getId()))
@@ -212,7 +212,7 @@ public class UpdateMemberControllerTest {
 	public void testPostConfirmUpdateValidMemberRedirectIndex() throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		mockMvc.perform(post("/confirmUpdate")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"));

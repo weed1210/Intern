@@ -2,7 +2,7 @@ package controller.home;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -73,10 +72,11 @@ public class HomeControllerTest {
 	public void testGetIndex() throws Exception {
 		Page<Member> members = new PageImpl<Member>(new ArrayList<Member>());
 		// Add some mock data to members list
-		when(memberService.select("", 1)).thenReturn(members);
+		when(memberService.select("", 1, "")).thenReturn(members);
 
 		mockMvc.perform(get("/")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("authHeader", "")
 				.queryParam("searchString", ""))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"))
@@ -93,7 +93,7 @@ public class HomeControllerTest {
 	@Test
 	public void testAuthenticate() throws Exception {
 		MvcResult result = mockMvc.perform(get("/login-sucess")
-				.with(user(MemberSecurityHelper.getAdminUser())))
+				.with(authentication(MemberSecurityHelper.getAdminUser())))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/"))
 				.andReturn();

@@ -1,29 +1,35 @@
 package helper;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import dxc.assignment.model.Member;
+import dxc.assignment.security.CustomPrincipal;
 
 public class MemberSecurityHelper {
-	public static UserDetails getAdminUser() {
+	public static UsernamePasswordAuthenticationToken getAdminUser() {
 		UserDetails admin = User.builder()
 				.username("caovy@gmail.com")
 				.password("12345678")
 				.authorities("ROLE_ADMIN")
 				.build();
 
-		return admin;
+		return new UsernamePasswordAuthenticationToken(
+				new CustomPrincipal("caovy@gmail.com", ""), "12345678",
+				admin.getAuthorities());
 	}
 
-	public static UserDetails getEditUser() {
+	public static UsernamePasswordAuthenticationToken getEditUser() {
 		UserDetails edit = User.builder()
 				.username("thanhDung@gmail.com")
 				.password("12345678")
 				.authorities("ROLE_EDIT")
 				.build();
 
-		return edit;
+		return new UsernamePasswordAuthenticationToken(
+				new CustomPrincipal("thanhDung@gmail.com", ""), "12345678",
+				edit.getAuthorities());
 	}
 
 	public static UserDetails getViewUser() {

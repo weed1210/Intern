@@ -3,7 +3,7 @@ package controller.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +26,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.util.NestedServletException;
 
-import dxc.assignment.controller.member.AddMemberController;
 import dxc.assignment.controller.member.DeleteMemberController;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.model.Member;
@@ -64,7 +63,7 @@ public class DeleteMemberControllerTest {
 		when(memberService.selectById(0)).thenReturn(null);
 		
 		mockMvc.perform(get("/confirmDelete/0")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("memberRole", "ROLE_ADMIN"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"))
@@ -77,7 +76,7 @@ public class DeleteMemberControllerTest {
 		when(memberService.selectById(1)).thenReturn(validTestMember);
 		
 		MvcResult result = mockMvc.perform(get("/confirmDelete/1")
-				.with(user(MemberSecurityHelper.getAdminUser()))
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("memberRole", "ROLE_ADMIN"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("confirm"))
@@ -101,7 +100,7 @@ public class DeleteMemberControllerTest {
 		
 		try {
 			mockMvc.perform(get("/confirmDelete/1")
-					.with(user(MemberSecurityHelper.getEditUser()))
+					.with(authentication(MemberSecurityHelper.getEditUser()))
 					.sessionAttr("memberRole", "ROLE_EDIT"));
 		}
 		catch (NestedServletException e) {
@@ -112,7 +111,7 @@ public class DeleteMemberControllerTest {
 	@Test
 	public void testPostConfirmDeleteRedirectIndex() throws Exception {
 		mockMvc.perform(post("/confirmDelete/1")
-				.with(user(MemberSecurityHelper.getAdminUser())))
+				.with(authentication(MemberSecurityHelper.getAdminUser())))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"));
 	}

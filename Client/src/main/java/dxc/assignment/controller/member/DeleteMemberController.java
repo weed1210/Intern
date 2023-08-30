@@ -1,10 +1,8 @@
 package dxc.assignment.controller.member;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 
 import javax.security.auth.message.AuthException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.security.access.annotation.Secured;
@@ -33,10 +31,12 @@ public class DeleteMemberController {
 	public String confirmDelete(@PathVariable int id, ModelMap model,
 			HttpSession session, RedirectAttributes redirectAttributes)
 			throws AuthException, IOException {
+		String authHeader = (String) session.getAttribute("authHeader");
+		
 		// Get the current user and deleting user, check if deleting an higher level
 		// member
 		String memberRole = (String) session.getAttribute("memberRole");
-		Member member = memberService.selectById(id);
+		Member member = memberService.selectById(id, authHeader);
 		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
 			throw new AuthException();
 		}
@@ -57,9 +57,11 @@ public class DeleteMemberController {
 
 	// Delete the member
 	@PostMapping("/confirmDelete/{id}")
-	public String confirmRegister(@PathVariable int id) throws IOException {
+	public String confirmRegister(@PathVariable int id, HttpSession session) throws IOException {
+		String authHeader = (String) session.getAttribute("authHeader");
+		
 		try {
-			memberService.delete(id);
+			memberService.delete(id, authHeader);
 
 			return "redirect:/";
 		} catch (IOException e) {

@@ -33,8 +33,6 @@ public class MemberController {
 		List<Member> members = memberMapper.select(searchString,
 				new RowBounds(pageSize * (currentPage - 1), pageSize));
 		int totalCount = memberMapper.countMembers(searchString);
-		System.out.println(searchString);
-		System.out.println(totalCount);
 		return new MemberSelectResponse(members, totalCount);
 	}
 	

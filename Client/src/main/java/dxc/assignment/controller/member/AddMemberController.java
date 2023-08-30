@@ -3,11 +3,9 @@ package dxc.assignment.controller.member;
 import java.io.IOException;
 
 import javax.security.auth.message.AuthException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -44,7 +42,6 @@ public class AddMemberController {
 	@PostMapping("/register")
 	public String register(@Valid @ModelAttribute("member") Member member,
 			BindingResult bindingResult, HttpSession session) throws AuthException {
-		System.out.println(member.getUsername().length());
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
@@ -88,15 +85,16 @@ public class AddMemberController {
 	// Insert the new member
 	@PostMapping("/confirmRegister")
 	public String confirmRegister(@ModelAttribute("member") Member member,
-			ModelMap modelMap) throws IOException {
+			ModelMap modelMap, HttpSession session) throws IOException {
+		String authHeader = (String) session.getAttribute("authHeader");
+
 		try {
 			// Encode the new member password before insert
 			encoderHelper.encodeMemberPassword(member);
-			System.out.println(member.getEmail());
-			memberService.insert(member);
+			memberService.insert(member, authHeader);
 
 			return "redirect:/";
-		} 
+		}
 //		catch (DuplicateKeyException e) {
 //			modelMap.addAttribute("registerError",
 //					"メールアドレス" + member.getEmail() + "はすでに存在しています");
