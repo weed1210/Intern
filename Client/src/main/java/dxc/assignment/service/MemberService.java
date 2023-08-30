@@ -3,6 +3,8 @@ package dxc.assignment.service;
 import java.io.IOException;
 import java.util.Collections;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -17,20 +19,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Service
 public class MemberService {
 	private int pageSize = 10;
-	private final MemberClient memberClient;
+	private MemberClient memberClient;
 
-	public MemberService() {
-		Retrofit retrofit = new Retrofit.Builder()
-				.baseUrl("http://localhost:9090/Application/")
-				.addConverterFactory(GsonConverterFactory.create())
-				.build();
-
-		memberClient = retrofit.create(MemberClient.class);
+	public MemberService(Retrofit retrofit) {
+		this.memberClient = retrofit.create(MemberClient.class);
 	}
 
-	public Page<Member> select(String searchString, int currentPage) throws IOException {
+	public Page<Member> select(String searchString, int currentPage, String authHeader) throws IOException {
 		MemberSelectResponse response = memberClient
-				.select(searchString, currentPage, pageSize)
+				.select(searchString, currentPage, pageSize, authHeader)
 				.execute().body();
 
 		Page<Member> paginatedMember = new PageImpl<Member>(response.getMembers(),
@@ -43,8 +40,8 @@ public class MemberService {
 		return memberClient.selectById(id).execute().body();
 	}
 
-	public Member selectByEmail(String email) throws IOException {
-		return memberClient.selectByEmail(email).execute().body();
+	public Member selectByEmail(String email, String authHeader) throws IOException {
+		return memberClient.selectByEmail(email, authHeader).execute().body();
 	}
 
 	public void insert(Member member) throws IOException {

@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -14,17 +15,19 @@ import retrofit2.http.Query;
 public interface MemberClient {
 	@GET("members")
 	Call<MemberSelectResponse> select(@Query("searchString") String searchString,
-			@Query("currentPage") int currentPage, @Query("pageSize") int pageSize);
+			@Query("currentPage") int currentPage, @Query("pageSize") int pageSize,
+			@Header("Authorization") String authHeader);
 
 	@GET("members/id/{id}")
 	Call<Member> selectById(@Path("id") int id);
-	
+
 	@GET("members/email/{email}")
-	Call<Member> selectByEmail(@Path("email") String email);
+	Call<Member> selectByEmail(@Path("email") String email,
+			@Header("Authorization") String authHeader);
 
 	@POST("members")
 	Call<Void> insert(@Body Member member);
-	
+
 	@PUT("members")
 	Call<Void> update(@Body Member member);
 

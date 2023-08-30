@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dxc.assignment.model.request.LoginRequest;
+import dxc.assignment.model.response.AuthenticateResponse;
 import dxc.assignment.security.JwtProvider;
 
 @RestController
@@ -29,7 +30,7 @@ public class AuthController {
 	}
 
 	@PostMapping("login")
-	public String authenticateUser(@RequestBody LoginRequest loginRequest) {
+	public AuthenticateResponse authenticateUser(@RequestBody LoginRequest loginRequest) {
 
 		// Xác thực từ username và password.
 		Authentication authentication = authenticationManager.authenticate(
@@ -44,6 +45,7 @@ public class AuthController {
 		// Trả về jwt cho người dùng.
 		String jwt = jwtProvider
 				.generateToken((UserDetails) authentication.getPrincipal());
-		return jwt;
+		System.out.println("Jwt: " + jwt);
+		return new AuthenticateResponse(jwt);
 	}
 }

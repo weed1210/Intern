@@ -11,6 +11,8 @@ import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +23,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import dxc.assignment.model.Member;
+import dxc.assignment.security.CustomPrincipal;
 import dxc.assignment.service.MemberService;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Controller
 public class HomeController {
@@ -37,8 +42,11 @@ public class HomeController {
 			@RequestParam("page") Optional<Integer> page, HttpSession session)
 			throws IOException {
 		session.setAttribute("searchString", searchString.orElse(""));
+
+		String authHeader = (String) session.getAttribute("authHeader");
+
 		Page<Member> members = memberService
-				.select(searchString.orElse(""), page.orElse(1));
+				.select(searchString.orElse(""), page.orElse(1), authHeader);
 		model.addAttribute("members", members);
 
 		return "index";
@@ -53,8 +61,8 @@ public class HomeController {
 	public String authenticate(Authentication authentication,
 			HttpSession session) {
 		// Get current user detail
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		Collection<? extends GrantedAuthority> authorities = userDetails
+		CustomPrincipal principal = (CustomPrincipal) authentication.getPrincipal();
+		Collection<? extends GrantedAuthority> authorities = authentication
 				.getAuthorities();
 		List<String> roles = new ArrayList<>();
 		for (GrantedAuthority authority : authorities) {
@@ -62,7 +70,8 @@ public class HomeController {
 		}
 
 		// Set current user email and role to session
-		session.setAttribute("memberEmail", userDetails.getUsername());
+		session.setAttribute("authHeader", "Bearer " + principal.getJwtToken());
+		session.setAttribute("memberEmail", principal.getName());
 		session.setAttribute("memberRole", roles.get(0));
 
 		return "redirect:/";

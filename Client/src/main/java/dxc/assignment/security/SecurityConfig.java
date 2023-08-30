@@ -2,6 +2,8 @@ package dxc.assignment.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,13 +16,33 @@ import dxc.assignment.service.MemberService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	private final MemberService memberService;
+	private MemberService memberService;
+	private CustomAuthProvider authProvider;
 
-	public SecurityConfig(MemberService memberService) {
+	public SecurityConfig(MemberService memberService, CustomAuthProvider authProvider) {
 		this.memberService = memberService;
+		this.authProvider = authProvider;
 	}
 
-	// DI the brypt encoder bean, automatically encode the password from login request when compare
+//	@Bean
+//	public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+//		AuthenticationManagerBuilder authenticationManagerBuilder = http
+//				.getSharedObject(AuthenticationManagerBuilder.class);
+//		authenticationManagerBuilder.authenticationProvider(authProvider);
+//		return authenticationManagerBuilder.build();
+//	}
+	
+	@Override
+	  protected void configure(AuthenticationManagerBuilder auth) {
+	      auth.authenticationProvider(authProvider);
+
+	      //We can register as many providers as we may have
+	      //auth.authenticationProvider(customProviderTwo);
+	      //auth.authenticationProvider(customProviderThree);
+	  }
+
+	// DI the brypt encoder bean, automatically encode the password from login
+	// request when compare
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -45,11 +67,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 
 		http.exceptionHandling().accessDeniedPage("/accessDenied");
-	}
-
-	// DI the custom detail service
-	@Bean
-	public MemberDetailService springDataUserDetailsService() {
-		return new MemberDetailService(memberService);
 	}
 }
