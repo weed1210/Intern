@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <faceted-project>
+  <runtime name="DXC.Client"/>
   <fixed facet="jst.utility"/>
   <fixed facet="java"/>
   <installed facet="java" version="1.7"/>

@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="resourcePath" value="${contextPath }/resources" />
@@ -93,7 +94,35 @@
 			<c:import url="layout/footer.jsp" />
 		</div>
 	</div>
-	<c:import url="layout/script.jsp" />
+
+	<!-- Modal -->
+	<div class="modal fade" id="errorModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">サーバーがエラーを返しました。</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					お客様のリクエストは実行できません。 <br /> ${confirmError }
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger"
+						data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+<c:import url="layout/script.jsp" />
+<c:if test="${not empty confirmError}">
+	<script>
+		const myModal = new bootstrap.Modal(document
+				.getElementById('errorModal'));
+		myModal.show();
+	</script>
+</c:if>
 
 </html>

@@ -13,11 +13,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.gson.Gson;
 
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.model.Member;
+import dxc.assignment.model.error.ApiError;
 import dxc.assignment.service.MemberService;
+import retrofit2.Response;
 
 @Controller
 @Secured({ MemberRole.ADMIN, MemberRole.EDIT })
@@ -41,7 +46,8 @@ public class AddMemberController {
 	// Validate member field and redirect to confirmation
 	@PostMapping("/register")
 	public String register(@Valid @ModelAttribute("member") Member member,
-			BindingResult bindingResult, HttpSession session) throws AuthException {
+			BindingResult bindingResult, HttpSession session, ModelMap modelMap)
+			throws AuthException {
 		if (bindingResult.hasErrors()) {
 			return "register";
 		}
@@ -85,29 +91,33 @@ public class AddMemberController {
 	// Insert the new member
 	@PostMapping("/confirmRegister")
 	public String confirmRegister(@ModelAttribute("member") Member member,
-			ModelMap modelMap, HttpSession session) throws IOException {
+			RedirectAttributes redirectAttributes, HttpSession session) {
 		String authHeader = (String) session.getAttribute("authHeader");
 
 		try {
 			// Encode the new member password before insert
 			encoderHelper.encodeMemberPassword(member);
-			memberService.insert(member, authHeader);
+			Response<Void> response = memberService.insert(member, authHeader);
+			if (!response.isSuccessful()) {
+				// On server return error
+				// Get error from server response
+				ApiError error = new Gson().fromJson(
+						response.errorBody().charStream(), ApiError.class);
+				redirectAttributes.addFlashAttribute("confirmError",
+						error.getResponse());
+				return "redirect:/confirmRegister";
+			} else {
+				redirectAttributes.addFlashAttribute("successMessage",
+						"登録が完了しました。");
+			}
 
 			return "redirect:/";
-		}
-//		catch (DuplicateKeyException e) {
-//			modelMap.addAttribute("registerError",
-//					"メールアドレス" + member.getEmail() + "はすでに存在しています");
-//			return "register";
-//		} 
-		catch (IOException e) {
+		} catch (IOException e) {
+			// On call to server fail
 			System.out.println(e);
-			System.out.println(e.getCause().getClass());
-			throw e;
-		} catch (Exception e) {
-			System.out.println(e.getClass().getCanonicalName());
-			System.out.println(e.getMessage());
-			return "register";
+			redirectAttributes.addFlashAttribute("confirmError",
+					"挿入時にエラーが発生しました。");
+			return "redirect:/confirmRegister";
 		}
 	}
 }

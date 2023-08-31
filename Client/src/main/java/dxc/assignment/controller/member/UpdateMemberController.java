@@ -16,11 +16,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.helper.ValidationHelper;
 import dxc.assignment.model.Member;
+import dxc.assignment.model.error.ApiError;
 import dxc.assignment.service.MemberService;
+import retrofit2.Response;
 
 @Controller
 @Secured({ MemberRole.ADMIN, MemberRole.EDIT })
@@ -107,19 +111,34 @@ public class UpdateMemberController {
 
 	// Update the member
 	@PostMapping("/confirmUpdate")
-	public String confirmUpdate(@ModelAttribute("member") Member member, HttpSession session)
-			throws IOException {
+	public String confirmUpdate(@ModelAttribute("member") Member member,
+			HttpSession session, RedirectAttributes redirectAttributes) {
 		String authHeader = (String) session.getAttribute("authHeader");
-		
+
 		// Encode the new member password before update
 		try {
 			encoderHelper.encodeMemberPassword(member);
-			memberService.update(member,authHeader);
+			Response<Void> response = memberService.update(member, authHeader);
+			if (!response.isSuccessful()) {
+				// On server return error
+				// Get error from server response
+				ApiError error = new Gson().fromJson(
+						response.errorBody().charStream(), ApiError.class);
+				redirectAttributes.addFlashAttribute("confirmError",
+						error.getResponse());
+				return "redirect:/confirmUpdate";
+			} else {
+				redirectAttributes.addFlashAttribute("successMessage",
+						"更新が完了しました。");
+			}
 
 			return "redirect:/";
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
-			throw e;
+			// On call to server fail
+			System.out.println(e);
+			redirectAttributes.addFlashAttribute("confirmError",
+					"挿入時にエラーが発生しました。");
+			return "redirect:/confirmUpdate";
 		}
 	}
 }

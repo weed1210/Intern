@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.model.Member;
+import dxc.assignment.model.error.ApiError;
 import dxc.assignment.service.MemberService;
+import retrofit2.Response;
 
 @Controller
 @Secured({ MemberRole.ADMIN, MemberRole.EDIT })
@@ -32,7 +36,7 @@ public class DeleteMemberController {
 			HttpSession session, RedirectAttributes redirectAttributes)
 			throws AuthException, IOException {
 		String authHeader = (String) session.getAttribute("authHeader");
-		
+
 		// Get the current user and deleting user, check if deleting an higher level
 		// member
 		String memberRole = (String) session.getAttribute("memberRole");
@@ -57,17 +61,32 @@ public class DeleteMemberController {
 
 	// Delete the member
 	@PostMapping("/confirmDelete/{id}")
-	public String confirmRegister(@PathVariable int id, HttpSession session) throws IOException {
+	public String confirmRegister(@PathVariable int id, HttpSession session,
+			RedirectAttributes redirectAttributes) {
 		String authHeader = (String) session.getAttribute("authHeader");
-		
+
 		try {
-			memberService.delete(id, authHeader);
+			Response<Void> response = memberService.delete(id, authHeader);
+			if (!response.isSuccessful()) {
+				// On server return error
+				// Get error from server response
+				ApiError error = new Gson().fromJson(
+						response.errorBody().charStream(), ApiError.class);
+				redirectAttributes.addFlashAttribute("confirmError",
+						error.getResponse());
+				return "redirect:/confirmDelete/" + id;
+			} else {
+				redirectAttributes.addFlashAttribute("successMessage",
+						"削除が完了しました。");
+			}
 
 			return "redirect:/";
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
-			throw e;
+			// On call to server fail
+			System.out.println(e);
+			redirectAttributes.addFlashAttribute("confirmError",
+					"挿入時にエラーが発生しました。");
+			return "redirect:/confirmDelete/" + id;
 		}
-
 	}
 }

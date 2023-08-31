@@ -9,6 +9,8 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -17,12 +19,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import dxc.assignment.model.Member;
+import dxc.assignment.model.response.MemberSelectResponse;
 import dxc.assignment.security.CustomPrincipal;
 import dxc.assignment.service.MemberService;
+import retrofit2.Response;
 
 @Controller
 public class HomeController {
 	private final MemberService memberService;
+	private int pageSize = 10;
 
 	public HomeController(MemberService memberService) {
 		this.memberService = memberService;
@@ -33,14 +38,39 @@ public class HomeController {
 			@RequestParam("searchString") Optional<String> searchString,
 			@RequestParam("page") Optional<Integer> page, HttpSession session)
 			throws IOException {
-		session.setAttribute("searchString", searchString.orElse(""));
+		String search = searchString.orElse("");
+		int currentPage = page.orElse(1);
+		Page<Member> paginatedMember;
 
+		// Set search string to session
+		session.setAttribute("searchString", search);
+		// Get auth header
 		String authHeader = (String) session.getAttribute("authHeader");
 
-		Page<Member> members = memberService
-				.select(searchString.orElse(""), page.orElse(1), authHeader);
-		model.addAttribute("members", members);
+		try {
+			// Call Api
+			Response<MemberSelectResponse> response = memberService
+					.select(search, currentPage, pageSize, authHeader);
 
+			if (response.isSuccessful()) {
+				// Paginate the result on success
+				MemberSelectResponse members = response.body();
+				paginatedMember = new PageImpl<Member>(
+						members.getMembers(),
+						PageRequest.of(currentPage - 1, pageSize),
+						members.getTotalCount());
+			} else {
+				throw new IOException();
+			}
+		} catch (IOException e) {
+			// On call to server fail
+			// Empty paginated result
+			paginatedMember = new PageImpl<Member>(new ArrayList<Member>());
+			model.addAttribute("serverError",
+					"挿入時にエラーが発生しました。");
+		}
+
+		model.addAttribute("members", paginatedMember);
 		return "index";
 	}
 

@@ -7,23 +7,25 @@ import javax.validation.constraints.Size;
 public class Member {
 	private int id;
 
-	@Size(max = 25, min = 1, message = "Please enter your email address correctly within 25 characters")
+	@Size(max = 25, min = 1, message = "お名前は25文字以内で入力して下さい。")
 	private String username;
 
-	@Email(message = "Invalid email format")
+	@Email(message = "無効なメール形式です。")
+	@Size(max = 25, min = 1, message = "メールアドレスは、25文字以内で正しく入力して下さい。")
 	private String email;
 
-	@Pattern(regexp = "\\d{10}", message = "Must be entered within 10 digits")
+	@Pattern(regexp = "\\d{10}", message = "電話番号は、数字10文字以内で入力して下さい。")
 	private String phoneNumber;
 
-	@Size(min = 8, max = 25, message = "Password must be between 8 to 25 characters")
+	@Size(min = 8, max = 25, message = "パスワードは8文字から25文字の間で設定してください。")
 	private String password;
-	
+
 	private String passwordHash;
-	
+
 	private String role;
 
-	public Member(int id, String username, String email, String phoneNumber, String passwordHash, String role) {
+	public Member(int id, String username, String email, String phoneNumber,
+			String passwordHash, String role) {
 		this.id = id;
 		this.username = username;
 		this.email = email;

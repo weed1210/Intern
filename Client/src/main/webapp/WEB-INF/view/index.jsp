@@ -54,7 +54,8 @@
 											</thead>
 											<tbody>
 
-												<c:forEach var="member" items="${members.content}" varStatus="status">
+												<c:forEach var="member" items="${members.content}"
+													varStatus="status">
 													<tr>
 														<td>${status.index+1 + members.size*members.number }</td>
 														<td>${member.username }</td>
@@ -82,7 +83,8 @@
 										<div class="container">
 											<ul class="pagination justify-content-center pagination-sm">
 												<c:if test="${members.totalPages > 0}">
-													<c:forEach var="pageNumber" begin="1" end="${members.totalPages}">
+													<c:forEach var="pageNumber" begin="1"
+														end="${members.totalPages}">
 														<c:set var="isActive"
 															value="${pageNumber == members.number+1}" />
 														<li class="page-item ${isActive ? 'active' : ''}"><a
@@ -113,7 +115,23 @@
 	<c:if test="${not empty getInfoError}">
 		<script>
 			$(document).ready(function() {
-				toastr.error('${getInfoError}', 'Error');
+				toastr.error('${getInfoError}', 'エラー f');
+			});
+		</script>
+	</c:if>
+
+	<c:if test="${not empty successMessage}">
+		<script>
+			$(document).ready(function() {
+				toastr.success('${successMessage }', '成功');
+			});
+		</script>
+	</c:if>
+
+	<c:if test="${not empty serverError}">
+		<script>
+			$(document).ready(function() {
+				toastr.error('${serverError }', 'エラー');
 			});
 		</script>
 	</c:if>

@@ -1,3 +1,4 @@
+<%@page import="org.springframework.validation.BindingResult"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -104,13 +105,6 @@
 		</div>
 	</div>
 	<c:import url="layout/script.jsp" />
-	<c:if test="${not empty registerError}">
-		<script>
-			$(document).ready(function() {
-				toastr.error('${registerError}', 'Error');
-			});
-		</script>
-	</c:if>
 </body>
 
 </html>
