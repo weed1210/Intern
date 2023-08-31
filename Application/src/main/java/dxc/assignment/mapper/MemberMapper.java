@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
-import org.postgresql.util.PSQLException;
 
 import dxc.assignment.model.Member;
 

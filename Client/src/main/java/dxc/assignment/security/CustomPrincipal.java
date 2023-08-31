@@ -3,6 +3,7 @@ package dxc.assignment.security;
 import java.io.Serializable;
 import java.security.Principal;
 
+// Principal to store the the jwt get from api on login
 public class CustomPrincipal implements Principal, Serializable {
 	private String name;
 	private String jwtToken;

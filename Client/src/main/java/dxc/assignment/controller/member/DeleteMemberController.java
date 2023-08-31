@@ -46,6 +46,7 @@ public class DeleteMemberController {
 			if (response.isSuccessful()) {
 				Member member = response.body();
 				// If member with role edit attemp to delete member with role admin
+				// Member cannot be null as api with return member or 404 NOT FOUND
 				if (memberRole.equals("ROLE_EDIT")
 						&& member.getRole().equals("ROLE_ADMIN")) {
 					throw new AuthException();

@@ -17,6 +17,8 @@ import dxc.assignment.service.AuthService;
 import dxc.assignment.service.MemberService;
 import retrofit2.Response;
 
+
+// Custom provider to login with api with email and password from login form
 @Component
 public class CustomAuthProvider implements AuthenticationProvider {
 	private AuthService authService;

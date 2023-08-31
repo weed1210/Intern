@@ -50,6 +50,7 @@ public class UpdateMemberController {
 		try {
 			Response<Member> response = memberService.selectById(id, authHeader);
 			if (response.isSuccessful()) {
+				// Member cannot be null as api with return member or 404 NOT FOUND
 				Member member = response.body();
 				if (memberRole.equals("ROLE_EDIT")
 						&& member.getRole().equals("ROLE_ADMIN")) {

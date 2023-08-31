@@ -1,8 +1,5 @@
 package dxc.assignment.controller;
 
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,17 +29,17 @@ public class AuthController {
 	@PostMapping("login")
 	public AuthenticateResponse authenticateUser(@RequestBody LoginRequest loginRequest) {
 
-		// Xác thực từ username và password.
+		// Authenticate with email and password
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(
 						loginRequest.getEmail(),
 						loginRequest.getPassword()));
 
-		// Nếu không xảy ra exception tức là thông tin hợp lệ
-		// Set thông tin authentication vào Security Context
+		// If not exception throw all information is valid
+		// Set authentication info to Security Context
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		// Trả về jwt cho người dùng.
+		// Return jwt to client
 		String jwt = jwtProvider
 				.generateToken((UserDetails) authentication.getPrincipal());
 		return new AuthenticateResponse(jwt);

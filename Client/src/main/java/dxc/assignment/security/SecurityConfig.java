@@ -19,21 +19,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		this.authProvider = authProvider;
 	}
 
-//	@Bean
-//	public AuthenticationManager authManager(HttpSecurity http) throws Exception {
-//		AuthenticationManagerBuilder authenticationManagerBuilder = http
-//				.getSharedObject(AuthenticationManagerBuilder.class);
-//		authenticationManagerBuilder.authenticationProvider(authProvider);
-//		return authenticationManagerBuilder.build();
-//	}
-
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) {
+		// Register user define custom auth provider
 		auth.authenticationProvider(authProvider);
-
-		// We can register as many providers as we may have
-		// auth.authenticationProvider(customProviderTwo);
-		// auth.authenticationProvider(customProviderThree);
 	}
 
 	// DI the brypt encoder bean, automatically encode the password from login

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+// Get exception thrown by controller and return error page
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

@@ -12,6 +12,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 
+// Managing the creation of jwt and validate jwt from incoming request
 @Component
 public class JwtProvider {
 	private final String JWT_SECRET = "lodaaaaaa";
