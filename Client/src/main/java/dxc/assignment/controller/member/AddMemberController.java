@@ -98,7 +98,11 @@ public class AddMemberController {
 			// Encode the new member password before insert
 			encoderHelper.encodeMemberPassword(member);
 			Response<Void> response = memberService.insert(member, authHeader);
-			if (!response.isSuccessful()) {
+			if (response.isSuccessful()) {
+				redirectAttributes.addFlashAttribute("successMessage",
+						"登録が完了しました。");
+				return "redirect:/";
+			} else {
 				// On server return error
 				// Get error from server response
 				ApiError error = new Gson().fromJson(
@@ -106,12 +110,7 @@ public class AddMemberController {
 				redirectAttributes.addFlashAttribute("confirmError",
 						error.getResponse());
 				return "redirect:/confirmRegister";
-			} else {
-				redirectAttributes.addFlashAttribute("successMessage",
-						"登録が完了しました。");
 			}
-
-			return "redirect:/";
 		} catch (IOException e) {
 			// On call to server fail
 			System.out.println(e);

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import dxc.assignment.client.AuthClient;
 import dxc.assignment.model.request.LoginRequest;
+import dxc.assignment.model.response.AuthenticateResponse;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 @Service
@@ -16,7 +18,7 @@ public class AuthService {
 		authClient = retrofit.create(AuthClient.class);
 	}
 
-	public String authenticate(LoginRequest loginRequest) throws IOException {
-		return authClient.authenticate(loginRequest).execute().body().getJwtToken();
+	public Response<AuthenticateResponse> authenticate(LoginRequest loginRequest) throws IOException {
+		return authClient.authenticate(loginRequest).execute();
 	}
 }

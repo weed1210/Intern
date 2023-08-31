@@ -12,8 +12,10 @@ import org.springframework.stereotype.Component;
 
 import dxc.assignment.model.Member;
 import dxc.assignment.model.request.LoginRequest;
+import dxc.assignment.model.response.AuthenticateResponse;
 import dxc.assignment.service.AuthService;
 import dxc.assignment.service.MemberService;
+import retrofit2.Response;
 
 @Component
 public class CustomAuthProvider implements AuthenticationProvider {
@@ -32,19 +34,35 @@ public class CustomAuthProvider implements AuthenticationProvider {
 		String password = authentication.getCredentials().toString();
 
 		try {
-			String jwtToken = authService.authenticate(new LoginRequest(email, password));
-			Member member = memberService.selectByEmail(email, "Bearer " + jwtToken);
-			UserDetails user = User.builder()
-					.username(member.getEmail())
-					.password(member.getPassword())
-					.authorities(member.getRole())
-					.build();
+			// Call api for jwt with email and password
+			String jwtToken;
+			Response<AuthenticateResponse> authResponse = authService
+					.authenticate(new LoginRequest(email, password));
+			if (authResponse.isSuccessful()) {
+				jwtToken = authResponse.body().getJwtToken();
+			} else {
+				return null;
+			}
 
-			// use the credentials
-			// and authenticate against the third-party system
-			return new UsernamePasswordAuthenticationToken(
-					new CustomPrincipal(email, jwtToken), password,
-					user.getAuthorities());
+			// Call api for member with email
+			Response<Member> memberResponse = memberService.selectByEmail(email,
+					"Bearer " + jwtToken);
+			if (memberResponse.isSuccessful()) {
+				Member member = memberResponse.body();
+				UserDetails user = User.builder()
+						.username(member.getEmail())
+						.password(member.getPassword())
+						.authorities(member.getRole())
+						.build();
+
+				// use the credentials
+				// and authenticate against the third-party system
+				return new UsernamePasswordAuthenticationToken(
+						new CustomPrincipal(email, jwtToken), password,
+						user.getAuthorities());
+			} else {
+				return null;
+			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			return null;

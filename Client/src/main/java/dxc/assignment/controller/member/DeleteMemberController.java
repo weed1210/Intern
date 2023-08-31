@@ -34,29 +34,39 @@ public class DeleteMemberController {
 	@GetMapping("/confirmDelete/{id}")
 	public String confirmDelete(@PathVariable int id, ModelMap model,
 			HttpSession session, RedirectAttributes redirectAttributes)
-			throws AuthException, IOException {
+			throws AuthException {
 		String authHeader = (String) session.getAttribute("authHeader");
 
 		// Get the current user and deleting user, check if deleting an higher level
 		// member
 		String memberRole = (String) session.getAttribute("memberRole");
-		Member member = memberService.selectById(id, authHeader);
-		if (memberRole.equals("ROLE_EDIT") && member.getRole().equals("ROLE_ADMIN")) {
-			throw new AuthException();
-		}
 
-		if (member == null) {
-			redirectAttributes.addFlashAttribute("getInfoError",
-					"idが" + id + "のユーザーは存在しません。");
+		try {
+			Response<Member> response = memberService.selectById(id, authHeader);
+			if (response.isSuccessful()) {
+				Member member = response.body();
+				// If member with role edit attemp to delete member with role admin
+				if (memberRole.equals("ROLE_EDIT")
+						&& member.getRole().equals("ROLE_ADMIN")) {
+					throw new AuthException();
+				}
+
+				// Set the information for delete confimation page
+				model.addAttribute("member", member);
+				model.addAttribute("title", "会員を削除します");
+				model.addAttribute("confirmAction", "confirmDelete/" + member.getId());
+				model.addAttribute("cancelAction", "update/" + member.getId());
+				return "confirm";
+			} else {
+				redirectAttributes.addFlashAttribute("getInfoError",
+						"idが" + id + "のユーザーは存在しません。");
+				return "redirect:/";
+			}
+		} catch (IOException e) {
+			redirectAttributes.addFlashAttribute("serverError",
+					"挿入時にエラーが発生しました。");
 			return "redirect:/";
 		}
-
-		// Set the information for delete confimation page
-		model.addAttribute("member", member);
-		model.addAttribute("title", "会員を削除します");
-		model.addAttribute("confirmAction", "confirmDelete/" + member.getId());
-		model.addAttribute("cancelAction", "update/" + member.getId());
-		return "confirm";
 	}
 
 	// Delete the member
@@ -67,7 +77,11 @@ public class DeleteMemberController {
 
 		try {
 			Response<Void> response = memberService.delete(id, authHeader);
-			if (!response.isSuccessful()) {
+			if (response.isSuccessful()) {
+				redirectAttributes.addFlashAttribute("successMessage",
+						"削除が完了しました。");
+				return "redirect:/";
+			} else {
 				// On server return error
 				// Get error from server response
 				ApiError error = new Gson().fromJson(
@@ -75,12 +89,7 @@ public class DeleteMemberController {
 				redirectAttributes.addFlashAttribute("confirmError",
 						error.getResponse());
 				return "redirect:/confirmDelete/" + id;
-			} else {
-				redirectAttributes.addFlashAttribute("successMessage",
-						"削除が完了しました。");
 			}
-
-			return "redirect:/";
 		} catch (IOException e) {
 			// On call to server fail
 			System.out.println(e);

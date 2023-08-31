@@ -2,15 +2,11 @@ package dxc.assignment.service;
 
 import java.io.IOException;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import dxc.assignment.client.MemberClient;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.response.MemberSelectResponse;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -31,13 +27,13 @@ public class MemberService {
 				.execute();
 	}
 
-	public Member selectById(int id, String authHeader) throws IOException {
-		return memberClient.selectById(id, authHeader).execute().body();
+	public Response<Member> selectById(int id, String authHeader) throws IOException {
+		return memberClient.selectById(id, authHeader).execute();
 	}
 
-	public Member selectByEmail(String email, String authHeader)
+	public Response<Member> selectByEmail(String email, String authHeader)
 			throws IOException {
-		return memberClient.selectByEmail(email, authHeader).execute().body();
+		return memberClient.selectByEmail(email, authHeader).execute();
 	}
 
 	public Response<Void> insert(Member member, String authHeader) throws IOException {

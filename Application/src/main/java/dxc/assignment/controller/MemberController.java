@@ -32,24 +32,35 @@ public class MemberController {
 	}
 
 	@GetMapping
-	public MemberSelectResponse select(@RequestParam String searchString,
+	public ResponseEntity<Object> select(@RequestParam String searchString,
 			@RequestParam int currentPage, @RequestParam int pageSize) {
 		// Get members for specified page and search string
 		List<Member> members = memberMapper.select(searchString,
 				new RowBounds(pageSize * (currentPage - 1), pageSize));
 		// Get total count for search string
 		int totalCount = memberMapper.countMembers(searchString);
-		return new MemberSelectResponse(members, totalCount);
+		return new ResponseEntity<Object>(
+				new MemberSelectResponse(members, totalCount), HttpStatus.OK);
 	}
 
 	@GetMapping("id/{id}")
-	public Member selectById(@PathVariable("id") int id) {
-		return memberMapper.selectById(id);
+	public ResponseEntity<Object> selectById(@PathVariable("id") int id) {
+		Member member = memberMapper.selectById(id);
+		if (member != null) {
+			return new ResponseEntity<Object>(member, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("email/{email}")
-	public Member selectById(@PathVariable("email") String email) {
-		return memberMapper.selectByEmail(email);
+	public ResponseEntity<Object> selectById(@PathVariable("email") String email) {
+		Member member = memberMapper.selectByEmail(email);
+		if (member != null) {
+			return new ResponseEntity<Object>(member, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@PostMapping
