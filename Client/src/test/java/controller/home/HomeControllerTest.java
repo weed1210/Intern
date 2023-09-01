@@ -1,6 +1,7 @@
 package controller.home;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,8 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,9 +36,11 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import config.TestConfig;
 import dxc.assignment.controller.HomeController;
 import dxc.assignment.model.Member;
+import dxc.assignment.model.response.MemberSelectResponse;
 import dxc.assignment.security.SecurityConfig;
 import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
+import retrofit2.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -69,18 +71,40 @@ public class HomeControllerTest {
 	}
 
 	@Test
-	public void testGetIndex() throws Exception {
-		Page<Member> members = new PageImpl<Member>(new ArrayList<Member>());
-		// Add some mock data to members list
-		when(memberService.select("", 1, "")).thenReturn(members);
+	@SuppressWarnings("unchecked")
+	public void testGetIndexSuccessResponse() throws Exception {
+		List<Member> members = new ArrayList<Member>();
+		Response<MemberSelectResponse> response = mock(Response.class);
+		when(response.isSuccessful()).thenReturn(true);
+		when(response.body()).thenReturn(new MemberSelectResponse(members, 100));
+		when(memberService.select("", 1, 10, "Bearer token"))
+				.thenReturn(response);
 
 		mockMvc.perform(get("/")
 				.with(authentication(MemberSecurityHelper.getAdminUser()))
-				.sessionAttr("authHeader", "")
+				.sessionAttr("authHeader", "Bearer token")
 				.queryParam("searchString", ""))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"))
 				.andExpect(model().attributeExists("members"));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testGetIndexUnsuccessResponse() throws Exception {
+		Response<MemberSelectResponse> response = mock(Response.class);
+		when(response.isSuccessful()).thenReturn(false);
+		when(memberService.select("", 1, 10, "Bearer token"))
+				.thenReturn(response);
+
+		mockMvc.perform(get("/")
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("authHeader", "Bearer token")
+				.queryParam("searchString", ""))
+				.andExpect(status().isOk())
+				.andExpect(view().name("index"))
+				.andExpect(model().attributeExists("members"))
+				.andExpect(model().attributeExists("serverError"));
 	}
 
 	@Test
@@ -102,9 +126,11 @@ public class HomeControllerTest {
 
 		String memberEmail = (String) session.getAttribute("memberEmail");
 		String memberRole = (String) session.getAttribute("memberRole");
+		String authHeader = (String) session.getAttribute("authHeader");
 
 		assertEquals("caovy@gmail.com", memberEmail);
 		assertEquals("ROLE_ADMIN", memberRole);
+		assertEquals("Bearer token", authHeader);
 	}
 
 	@Test

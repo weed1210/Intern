@@ -2,12 +2,20 @@ package controller.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 
 import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpSession;
@@ -20,6 +28,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,13 +38,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.google.gson.Gson;
+
 import dxc.assignment.controller.member.AddMemberController;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.model.Member;
+import dxc.assignment.model.error.ApiError;
 import dxc.assignment.service.MemberService;
 import helper.MemberSecurityHelper;
+import retrofit2.Response;
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 public class AddMemberControllerTest {
 	private MockMvc mockMvc;
@@ -108,7 +122,7 @@ public class AddMemberControllerTest {
 
 		try {
 			mockMvc.perform(post("/register")
-					.with(authentication(MemberSecurityHelper.getAdminUser()))
+					.with(authentication(MemberSecurityHelper.getEditUser()))
 					.flashAttr("member", member)
 					.sessionAttr("memberRole", "ROLE_EDIT"));
 		} catch (Exception e) {
@@ -161,42 +175,55 @@ public class AddMemberControllerTest {
 	}
 
 	@Test
-	public void testPostConfirmRegisterDuplicateEmailReturnRegister() throws Exception {
-		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
-		Mockito.doThrow(new DuplicateKeyException(""))
-				.when(memberService).insert(validTestMember, "");
-
-		MvcResult result = mockMvc.perform(post("/confirmRegister")
-				.with(authentication(MemberSecurityHelper.getAdminUser()))
-				.flashAttr("member", validTestMember))
-				.andExpect(status().isOk())
-				.andExpect(view().name("register"))
-				.andReturn();
-
-		ModelMap model = result.getModelAndView().getModelMap();
-		String expected = "メールアドレスemail@gmail.comはすでに存在しています";
-		assertEquals(expected, model.getAttribute("registerError"));
-	}
-
-	@Test
-	public void testPostConfirmRegisterUnexpectedExceptionReturnRegister()
+	public void testPostConfirmRegisterDuplicateEmailRedirectConfirmRegister()
 			throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
-		Mockito.doThrow(new RuntimeException())
-				.when(memberService).insert(validTestMember, "");
+		Mockito.doThrow(new IOException(""))
+				.when(memberService).insert(validTestMember, "Bearer token");
 
 		mockMvc.perform(post("/confirmRegister")
 				.with(authentication(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("authHeader", "Bearer token")
 				.flashAttr("member", validTestMember))
-				.andExpect(status().isOk())
-				.andExpect(view().name("register"));
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/confirmRegister"))
+				.andExpect(flash().attribute("confirmError", "挿入時にエラーが発生しました。"));
 	}
 
 	@Test
-	public void testPostConfirmRegisterValidMemberRedirectIndex() throws Exception {
+	@SuppressWarnings("unchecked")
+	public void testPostConfirmRegisterFailRequestRedirectConfirmRegister()
+			throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		Response<Void> response = mock(Response.class, RETURNS_DEEP_STUBS);
+		when(response.isSuccessful()).thenReturn(false);
+		ApiError apiError = new ApiError("error", HttpStatus.BAD_REQUEST);
+		Reader reader = new StringReader(new Gson().toJson(apiError));
+		when(response.errorBody().charStream()).thenReturn(reader);
+		when(memberService.insert(validTestMember, "Bearer token"))
+				.thenReturn(response);
+
 		mockMvc.perform(post("/confirmRegister")
 				.with(authentication(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("authHeader", "Bearer token")
+				.flashAttr("member", validTestMember))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/confirmRegister"))
+				.andExpect(flash().attribute("confirmError", "error"));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testPostConfirmRegisterValidMemberRedirectIndex() throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		Response<Void> response = mock(Response.class);
+		when(response.isSuccessful()).thenReturn(true);
+		when(memberService.insert(validTestMember, "Bearer token"))
+				.thenReturn(response);
+
+		mockMvc.perform(post("/confirmRegister")
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("authHeader", "Bearer token")
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"));

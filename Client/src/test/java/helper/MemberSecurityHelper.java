@@ -16,7 +16,7 @@ public class MemberSecurityHelper {
 				.build();
 
 		return new UsernamePasswordAuthenticationToken(
-				new CustomPrincipal("caovy@gmail.com", ""), "12345678",
+				new CustomPrincipal("caovy@gmail.com", "token"), "12345678",
 				admin.getAuthorities());
 	}
 
