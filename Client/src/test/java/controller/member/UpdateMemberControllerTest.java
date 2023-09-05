@@ -285,7 +285,7 @@ public class UpdateMemberControllerTest {
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/confirmUpdate"))
-				.andExpect(flash().attribute("confirmError", "error"));
+				.andExpect(flash().attribute("confirmError", "更新中にエラーが発生しました。"));
 	}
 
 	@Test
@@ -300,6 +300,6 @@ public class UpdateMemberControllerTest {
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/confirmUpdate"))
-				.andExpect(flash().attribute("confirmError", "挿入時にエラーが発生しました。"));
+				.andExpect(flash().attribute("confirmError", "サーバーに接続できません"));
 	}
 }

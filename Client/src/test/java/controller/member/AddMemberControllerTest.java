@@ -175,24 +175,8 @@ public class AddMemberControllerTest {
 	}
 
 	@Test
-	public void testPostConfirmRegisterDuplicateEmailRedirectConfirmRegister()
-			throws Exception {
-		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
-		Mockito.doThrow(new IOException(""))
-				.when(memberService).insert(validTestMember, "Bearer token");
-
-		mockMvc.perform(post("/confirmRegister")
-				.with(authentication(MemberSecurityHelper.getAdminUser()))
-				.sessionAttr("authHeader", "Bearer token")
-				.flashAttr("member", validTestMember))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/confirmRegister"))
-				.andExpect(flash().attribute("confirmError", "挿入時にエラーが発生しました。"));
-	}
-
-	@Test
 	@SuppressWarnings("unchecked")
-	public void testPostConfirmRegisterFailRequestRedirectConfirmRegister()
+	public void testPostConfirmRegisterDuplicateEmailRedirectConfirmRegister()
 			throws Exception {
 		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
 		Response<Void> response = mock(Response.class, RETURNS_DEEP_STUBS);
@@ -209,7 +193,23 @@ public class AddMemberControllerTest {
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/confirmRegister"))
-				.andExpect(flash().attribute("confirmError", "error"));
+				.andExpect(flash().attribute("confirmError", "挿入中にエラーが発生しました。"));
+	}
+
+	@Test
+	public void testPostConfirmRegisterFailRequestRedirectConfirmRegister()
+			throws Exception {
+		Member validTestMember = MemberSecurityHelper.getValidTestAdminMember();
+		Mockito.doThrow(new IOException(""))
+				.when(memberService).insert(validTestMember, "Bearer token");
+
+		mockMvc.perform(post("/confirmRegister")
+				.with(authentication(MemberSecurityHelper.getAdminUser()))
+				.sessionAttr("authHeader", "Bearer token")
+				.flashAttr("member", validTestMember))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/confirmRegister"))
+				.andExpect(flash().attribute("confirmError", "サーバーに接続できません"));
 	}
 
 	@Test

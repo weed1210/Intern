@@ -181,7 +181,7 @@ public class DeleteMemberControllerTest {
 				.sessionAttr("authHeader", "Bearer token"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/confirmDelete/1"))
-				.andExpect(flash().attribute("confirmError", "error"));
+				.andExpect(flash().attribute("confirmError", "削除中にエラーが発生しました。"));
 	}
 
 	@Test
@@ -196,6 +196,6 @@ public class DeleteMemberControllerTest {
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/confirmDelete/1"))
-				.andExpect(flash().attribute("confirmError", "挿入時にエラーが発生しました。"));
+				.andExpect(flash().attribute("confirmError", "サーバーに接続できません"));
 	}
 }

@@ -105,17 +105,19 @@ public class AddMemberController {
 			} else {
 				// On server return error
 				// Get error from server response
-				ApiError error = new Gson().fromJson(
-						response.errorBody().charStream(), ApiError.class);
+//				ApiError error = new Gson().fromJson(
+//						response.errorBody().charStream(), ApiError.class);
+//				redirectAttributes.addFlashAttribute("confirmError",
+//						error.getResponse());
 				redirectAttributes.addFlashAttribute("confirmError",
-						error.getResponse());
+						"挿入中にエラーが発生しました。");
 				return "redirect:/confirmRegister";
 			}
 		} catch (IOException e) {
 			// On call to server fail
 			System.out.println(e);
 			redirectAttributes.addFlashAttribute("confirmError",
-					"挿入時にエラーが発生しました。");
+					"サーバーに接続できません");
 			return "redirect:/confirmRegister";
 		}
 	}

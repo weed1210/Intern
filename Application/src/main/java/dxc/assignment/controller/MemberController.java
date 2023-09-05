@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.postgresql.util.PSQLException;
+import org.postgresql.util.ServerErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ public class MemberController {
 		} catch (Exception e) {
 			PSQLException sqlEx = (PSQLException) e.getCause();
 			ApiError error = new ApiError(sqlEx.getMessage(), HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<>(error, error.getStatus());
+			return new ResponseEntity<Object>(sqlEx.getServerErrorMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
