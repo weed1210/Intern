@@ -67,7 +67,7 @@ public class HomeController {
 			// Empty paginated result
 			paginatedMember = new PageImpl<Member>(new ArrayList<Member>());
 			model.addAttribute("serverError",
-					"挿入時にエラーが発生しました。");
+					"サーバーに接続できません");
 		}
 
 		model.addAttribute("members", paginatedMember);

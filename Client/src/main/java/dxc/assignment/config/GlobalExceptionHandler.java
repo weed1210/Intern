@@ -16,8 +16,8 @@ public class GlobalExceptionHandler {
 		String instruction = "YOU SEEM TO BE TRYING TO FIND HIS WAY HOME";
 
 		ModelAndView modelAndView = new ModelAndView("error");
-		System.out.println("Global Error: " + ex.getMessage());
-		System.out.println("Global Error Class: " + ex.getCause().getClass());
+//		System.out.println("Global Error: " + ex.getMessage());
+//		System.out.println("Global Error Class: " + ex.getCause().getClass());
 		// Specify the error message and instruction for unauthorize access
 		if (ex instanceof AuthException) {
 			error = "ACCESS DENIED";
