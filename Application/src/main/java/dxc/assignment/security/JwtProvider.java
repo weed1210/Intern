@@ -17,12 +17,14 @@ import io.jsonwebtoken.UnsupportedJwtException;
 public class JwtProvider {
 	private final String JWT_SECRET = "lodaaaaaa";
 
-	private final long JWT_EXPIRATION = 604800000L;
+	// 1 minute
+	private final long JWT_EXPIRATION = 1000*60;
 
 	public String generateToken(UserDetails userDetails) {
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
-		// User identified by email
+		// User identified by email. get username return email because the user detail
+		// service load email into username
 		return Jwts.builder()
 				.setSubject(userDetails.getUsername())
 				.setIssuedAt(now)

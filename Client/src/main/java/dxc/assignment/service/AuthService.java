@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 
-import dxc.assignment.client.AuthClient;
+import dxc.assignment.dao.AuthClient;
 import dxc.assignment.model.request.LoginRequest;
 import dxc.assignment.model.response.AuthenticateResponse;
 import retrofit2.Response;

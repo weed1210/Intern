@@ -11,22 +11,21 @@ import org.springframework.web.servlet.ModelAndView;
 public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
-	public ModelAndView handleGlobalException(Exception ex) {
+	public ModelAndView handleGlobalException(Exception ex) throws Exception {
 		String error = "ERROR";
 		String instruction = "YOU SEEM TO BE TRYING TO FIND HIS WAY HOME";
 
 		ModelAndView modelAndView = new ModelAndView("error");
-//		System.out.println("Global Error: " + ex.getMessage());
-//		System.out.println("Global Error Class: " + ex.getCause().getClass());
-		// Specify the error message and instruction for unauthorize access
-		if (ex instanceof AuthException) {
-			error = "ACCESS DENIED";
-			instruction = "UNAUTHORIZE: YOU DONT HAVE THE PERMISSION TO ACCESS THIS FUNCTION";
-		}
-
-		modelAndView.addObject("error", error);
-		modelAndView.addObject("instruction", instruction);
-
-		return modelAndView;
+		throw ex;
+//		// Specify the error message and instruction for unauthorize access
+//		if (ex instanceof AuthException) {
+//			error = "ACCESS DENIED";
+//			instruction = "UNAUTHORIZE: YOU DONT HAVE THE PERMISSION TO ACCESS THIS FUNCTION";
+//		}
+//
+//		modelAndView.addObject("error", error);
+//		modelAndView.addObject("instruction", instruction);
+//
+//		return modelAndView;
 	}
 }

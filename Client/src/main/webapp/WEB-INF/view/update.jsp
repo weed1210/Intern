@@ -52,7 +52,9 @@
 									<div class="col-md-12 border-bottom p-0">
 										<form:input path="password" type="password"
 											placeholder="新しいパスワード" class="form-control p-0 border-0" />
-										<form:errors class="text-danger" path="password" />
+										<c:if test="${not empty member.password }">
+											<form:errors class="text-danger" path="password" />
+										</c:if>
 										<br />
 									</div>
 								</div>

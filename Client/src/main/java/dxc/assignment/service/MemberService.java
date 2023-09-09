@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 
-import dxc.assignment.client.MemberClient;
+import dxc.assignment.dao.MemberClient;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.response.MemberSelectResponse;
 import retrofit2.Response;

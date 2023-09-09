@@ -47,7 +47,9 @@ public class MemberController {
 	@GetMapping("id/{id}")
 	public ResponseEntity<Object> selectById(@PathVariable("id") int id) {
 		Member member = memberMapper.selectById(id);
+		// Return error code if not found so client dont have to check for null
 		if (member != null) {
+			// Member is not nullable
 			return new ResponseEntity<Object>(member, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
@@ -57,7 +59,9 @@ public class MemberController {
 	@GetMapping("email/{email}")
 	public ResponseEntity<Object> selectById(@PathVariable("email") String email) {
 		Member member = memberMapper.selectByEmail(email);
+		// Return error code if not found so client dont have to check for null
 		if (member != null) {
+			// Member is not nullable
 			return new ResponseEntity<Object>(member, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
@@ -67,9 +71,11 @@ public class MemberController {
 	@PostMapping
 	public ResponseEntity<Object> insert(@RequestBody Member member) {
 		try {
+			// Insert the new member into the database
 			memberMapper.insert(member);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
+			// Catch error from database and add the error to the error response
 			PSQLException sqlEx = (PSQLException) e.getCause();
 			ApiError error = new ApiError(sqlEx.getMessage(), HttpStatus.BAD_REQUEST);
 			return new ResponseEntity<Object>(sqlEx.getServerErrorMessage(), HttpStatus.BAD_REQUEST);
@@ -79,9 +85,11 @@ public class MemberController {
 	@PutMapping
 	public ResponseEntity<Object> update(@RequestBody Member member) {
 		try {
+			// Update the new member into the database
 			memberMapper.update(member);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
+			// Catch error from database and add the error to the error response
 			PSQLException sqlEx = (PSQLException) e.getCause();
 			ApiError error = new ApiError(sqlEx.getMessage(), HttpStatus.BAD_REQUEST);
 			return new ResponseEntity<>(error, error.getStatus());
@@ -91,9 +99,17 @@ public class MemberController {
 	@DeleteMapping("{id}")
 	public ResponseEntity<Object> delete(@PathVariable("id") int id) {
 		try {
+			// Find if member is exist
+			Member member = memberMapper.selectById(id);
+			// Return error code on member not found
+			if (member == null) {
+				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+			}
+			
 			memberMapper.delete(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
+			// Catch error from database and add the error to the error response
 			PSQLException sqlEx = (PSQLException) e.getCause();
 			ApiError error = new ApiError(sqlEx.getMessage(), HttpStatus.BAD_REQUEST);
 			return new ResponseEntity<>(error, error.getStatus());

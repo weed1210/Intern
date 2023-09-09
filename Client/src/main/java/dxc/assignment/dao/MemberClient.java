@@ -1,4 +1,4 @@
-package dxc.assignment.client;
+package dxc.assignment.dao;
 
 import dxc.assignment.model.Member;
 import dxc.assignment.model.response.MemberSelectResponse;

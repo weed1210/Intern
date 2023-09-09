@@ -16,13 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.gson.Gson;
-
 import dxc.assignment.constant.MemberRole;
+import dxc.assignment.helper.AuthHelper;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.helper.ValidationHelper;
 import dxc.assignment.model.Member;
-import dxc.assignment.model.error.ApiError;
 import dxc.assignment.service.MemberService;
 import retrofit2.Response;
 
@@ -59,9 +57,12 @@ public class UpdateMemberController {
 				model.addAttribute("member", member);
 				return "update";
 			} else {
+				// If 403 return login
+				String destination = AuthHelper.checkResponseStatusToDecideDestination(
+						response, "redirect:/");
 				redirectAttributes.addFlashAttribute("getInfoError",
 						"idが" + id + "のユーザーは存在しません。");
-				return "redirect:/";
+				return destination;
 			}
 		} catch (IOException e) {
 			redirectAttributes.addFlashAttribute("serverError",
@@ -130,15 +131,12 @@ public class UpdateMemberController {
 						"更新が完了しました。");
 				return "redirect:/";
 			} else {
-				// On server return error
-//				// Get error from server response
-//				ApiError error = new Gson().fromJson(
-//						response.errorBody().charStream(), ApiError.class);
-//				redirectAttributes.addFlashAttribute("confirmError",
-//						error.getResponse());
+				// If 403 return login
+				String destination = AuthHelper.checkResponseStatusToDecideDestination(
+						response, "redirect:/confirmUpdate");
 				redirectAttributes.addFlashAttribute("confirmError",
 						"更新中にエラーが発生しました。");
-				return "redirect:/confirmUpdate";
+				return destination;
 			}
 		} catch (IOException e) {
 			// On call to server fail
