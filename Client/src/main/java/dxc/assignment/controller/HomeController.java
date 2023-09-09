@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.ForbiddenException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -68,7 +70,7 @@ public class HomeController {
 			paginatedMember = new PageImpl<Member>(new ArrayList<Member>());
 			model.addAttribute("serverError",
 					"サーバーに接続できません");
-		}
+		} 
 
 		model.addAttribute("members", paginatedMember);
 		return "index";

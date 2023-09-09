@@ -57,12 +57,9 @@ public class UpdateMemberController {
 				model.addAttribute("member", member);
 				return "update";
 			} else {
-				// If 403 return login
-				String destination = AuthHelper.checkResponseStatusToDecideDestination(
-						response, "redirect:/");
 				redirectAttributes.addFlashAttribute("getInfoError",
 						"idが" + id + "のユーザーは存在しません。");
-				return destination;
+				return "redirect:/";
 			}
 		} catch (IOException e) {
 			redirectAttributes.addFlashAttribute("serverError",
@@ -131,12 +128,9 @@ public class UpdateMemberController {
 						"更新が完了しました。");
 				return "redirect:/";
 			} else {
-				// If 403 return login
-				String destination = AuthHelper.checkResponseStatusToDecideDestination(
-						response, "redirect:/confirmUpdate");
 				redirectAttributes.addFlashAttribute("confirmError",
 						"更新中にエラーが発生しました。");
-				return destination;
+				return "redirect:/confirmUpdate";
 			}
 		} catch (IOException e) {
 			// On call to server fail

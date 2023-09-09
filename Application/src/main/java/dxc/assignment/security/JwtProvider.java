@@ -17,8 +17,8 @@ import io.jsonwebtoken.UnsupportedJwtException;
 public class JwtProvider {
 	private final String JWT_SECRET = "lodaaaaaa";
 
-	// 1 minute
-	private final long JWT_EXPIRATION = 1000*60;
+	// 1 hour
+	private final long JWT_EXPIRATION = 1000*60*60;
 
 	public String generateToken(UserDetails userDetails) {
 		Date now = new Date();
