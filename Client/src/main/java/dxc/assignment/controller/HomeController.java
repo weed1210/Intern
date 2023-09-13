@@ -29,7 +29,7 @@ import retrofit2.Response;
 @Controller
 public class HomeController {
 	private final MemberService memberService;
-	private int pageSize = 10;
+	private int pageSize = 5;
 
 	public HomeController(MemberService memberService) {
 		this.memberService = memberService;

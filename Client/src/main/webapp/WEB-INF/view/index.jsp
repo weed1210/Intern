@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="resourcePath" value="${contextPath }/resources" />
 <c:set var="memberRole" value="${sessionScope.memberRole }" />
 <c:set var="memberEmail" value="${sessionScope.memberEmail }" />
 <c:set var="searchString" value="${sessionScope.searchString }" />
+<c:set var="maxPage" value="${5 }" />
+<c:set var="halfPage" value="${3 }" />
+<c:set var="currentPage" value="${members.number + 1 }" />
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -85,15 +88,93 @@
 												<c:if test="${members.totalPages > 0}">
 													<c:forEach var="pageNumber" begin="1"
 														end="${members.totalPages}">
-														<c:set var="isActive"
-															value="${pageNumber == members.number+1}" />
-														<li class="page-item ${isActive ? 'active' : ''}"><a
-															href="<c:url value='/'>
+														<!-- First three page, no previous button -->
+														<c:if test="${currentPage <= halfPage }">
+															<!-- Display first 5 page -->
+															<c:if test="${pageNumber <= maxPage }">
+																<c:set var="isActive"
+																	value="${pageNumber == currentPage}" />
+																<li class="page-item ${isActive ? 'active' : ''}"><a
+																	href="<c:url value='/'>
 											                        <c:param name="page" value="${pageNumber}" />
 											                        <c:param name="searchString" value="${searchString}" />
 											                    </c:url>"
-															class="page-link"> <c:out value="${pageNumber}" />
-														</a></li>
+																	class="page-link"> <c:out value="${pageNumber}" />
+																</a></li>
+															</c:if>
+															<!-- Page 6 will become next button -->
+															<c:if
+																test="${pageNumber == 1+maxPage && pageNumber < members.totalPages }">
+																<li class="page-item ${isActive ? 'active' : ''}"><a
+																	href="<c:url value='/'>
+											                        <c:param name="page" value="${currentPage+1}" />
+											                        <c:param name="searchString" value="${searchString}" />
+											                    </c:url>"
+																	class="page-link">&gt&gt</a></li>
+															</c:if>
+														</c:if>
+														<!-- between first and three page, previous and next button, current page at middle -->
+														<c:if
+															test="${currentPage > halfPage && currentPage <= members.totalPages - halfPage }">
+															<!-- Current page -3 as previous button -->
+															<c:if
+																test="${pageNumber == currentPage-halfPage && pageNumber > 0 }">
+																<li class="page-item ${isActive ? 'active' : ''}"><a
+																	href="<c:url value='/'>
+											                        <c:param name="page" value="${currentPage-1}" />
+											                        <c:param name="searchString" value="${searchString}" />
+											                    </c:url>"
+																	class="page-link">&lt&lt</a></li>
+															</c:if>
+															<!-- Display current page and 2 page before and after -->
+															<c:if
+																test="${pageNumber < (currentPage + halfPage) && pageNumber > (currentPage - halfPage) }">
+																<c:set var="isActive"
+																	value="${pageNumber == currentPage}" />
+																<li class="page-item ${isActive ? 'active' : ''}"><a
+																	href="<c:url value='/'>
+											                        <c:param name="page" value="${pageNumber}" />
+											                        <c:param name="searchString" value="${searchString}" />
+											                    </c:url>"
+																	class="page-link"> <c:out value="${pageNumber}" />
+																</a></li>
+															</c:if>
+															<!-- Current page +3 as next button -->
+															<c:if
+																test="${pageNumber == currentPage+halfPage && pageNumber <= members.totalPages }">
+																<li class="page-item ${isActive ? 'active' : ''}"><a
+																	href="<c:url value='/'>
+											                        <c:param name="page" value="${currentPage+1}" />
+											                        <c:param name="searchString" value="${searchString}" />
+											                    </c:url>"
+																	class="page-link">&gt&gt</a></li>
+															</c:if>
+														</c:if>
+														<!-- Last 5 page -->
+														<c:if
+															test="${currentPage > members.totalPages - halfPage }">
+															<c:if
+																test="${pageNumber > members.totalPages - maxPage }">
+																<c:set var="isActive"
+																	value="${pageNumber == currentPage}" />
+																<li class="page-item ${isActive ? 'active' : ''}"><a
+																	href="<c:url value='/'>
+											                        <c:param name="page" value="${pageNumber}" />
+											                        <c:param name="searchString" value="${searchString}" />
+											                    </c:url>"
+																	class="page-link"> <c:out value="${pageNumber}" />
+																</a></li>
+															</c:if>
+															<c:if
+																test="${pageNumber == members.totalPages-maxPage && pageNumber > 0 }">
+																<li class="page-item ${isActive ? 'active' : ''}"><a
+																	href="<c:url value='/'>
+											                        <c:param name="page" value="${currentPage-1}" />
+											                        <c:param name="searchString" value="${searchString}" />
+											                    </c:url>"
+																	class="page-link">&lt&lt</a></li>
+															</c:if>
+														</c:if>
 													</c:forEach>
 												</c:if>
 											</ul>

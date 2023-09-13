@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 public class Member {
 	private int id;
 
-	@Size(max = 50, min = 1, message = "お名前は25文字以内で入力して下さい。")
+	@Size(max = 25, min = 1, message = "お名前は25文字以内で入力して下さい。")
 	private String username;
 
 	@Email(message = "無効なメール形式です。")
