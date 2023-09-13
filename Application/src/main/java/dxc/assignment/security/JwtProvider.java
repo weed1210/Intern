@@ -10,6 +10,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 // Managing the creation of jwt and validate jwt from incoming request
@@ -55,6 +56,8 @@ public class JwtProvider {
 			System.out.println("Unsupported JWT token");
 		} catch (IllegalArgumentException ex) {
 			System.out.println("JWT claims string is empty.");
+		} catch (SignatureException ex) {
+			System.out.println("JWT claims signature is wrong.");
 		}
 		return false;
 	}

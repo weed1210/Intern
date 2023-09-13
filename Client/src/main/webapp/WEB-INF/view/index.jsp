@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath }" />
 <c:set var="resourcePath" value="${contextPath }/resources" />
@@ -58,8 +58,8 @@
 													varStatus="status">
 													<tr>
 														<td>${status.index+1 + members.size*members.number }</td>
-														<td>${member.username }</td>
-														<td>${member.email }</td>
+														<td>${fn:escapeXml(member.username) }</td>
+														<td>${fn:escapeXml(member.email) }</td>
 														<td>${member.phoneNumber }</td>
 														<td>${member.role }</td>
 														<c:if test="${!memberEmail.equals(member.email) }">

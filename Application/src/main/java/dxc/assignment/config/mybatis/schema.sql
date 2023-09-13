@@ -1,5 +1,7 @@
 SET lc_messages = 'ja_JP.UTF-8';
 
+DROP TABLE members;
+
 CREATE TABLE IF NOT EXISTS members
 (
    	member_id SERIAL PRIMARY KEY,
