@@ -110,7 +110,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger"
-						data-bs-dismiss="modal">Close</button>
+						data-bs-dismiss="modal">近い</button>
 				</div>
 			</div>
 		</div>
