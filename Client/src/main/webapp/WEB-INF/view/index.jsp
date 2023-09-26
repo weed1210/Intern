@@ -84,7 +84,7 @@
 											</tbody>
 										</table>
 										<div class="container">
-											<ul class="pagination justify-content-center pagination-sm">
+											<ul class="pagination justify-content-end pagination-sm">
 												<c:if test="${members.totalPages > 0}">
 													<c:forEach var="pageNumber" begin="1"
 														end="${members.totalPages}">

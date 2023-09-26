@@ -90,7 +90,7 @@ public class AddMemberController {
 
 	// Insert the new member
 	@PostMapping("/confirmRegister")
-	public String confirmRegister(@ModelAttribute("member") Member member,
+	public String confirmRegister(@Valid @ModelAttribute("member") Member member,
 			RedirectAttributes redirectAttributes, HttpSession session) {
 		String authHeader = (String) session.getAttribute("authHeader");
 
