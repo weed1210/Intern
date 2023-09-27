@@ -49,10 +49,6 @@
 													<th class="border-top-0">メール</th>
 													<th class="border-top-0">電話番号</th>
 													<th class="border-top-0">役割</th>
-													<c:if
-														test="${memberRole.equals('ROLE_ADMIN') or memberRole.equals('ROLE_EDIT')}">
-														<th class="border-top-0"></th>
-													</c:if>
 												</tr>
 											</thead>
 											<tbody>
@@ -60,25 +56,30 @@
 												<c:forEach var="member" items="${members.content}"
 													varStatus="status">
 													<tr>
-														<td>${status.index+1 + members.size*members.number }</td>
-														<td>${fn:escapeXml(member.username) }</td>
-														<td>${fn:escapeXml(member.email) }</td>
-														<td>${member.phoneNumber }</td>
-														<td>${member.role }</td>
-														<c:if test="${!memberEmail.equals(member.email) }">
+														<c:if test="${!memberEmail.equals(member.email)}">
 															<c:if
 																test="${sessionScope.memberRole.contains('ROLE_ADMIN') }">
 																<td><a href="${contextPath }/update/${member.id }">
-																		<button type="button" class="btn btn-primary">更新</button>
-																</a></td>
+																		${status.index+1 + members.size*members.number } </a></td>
 															</c:if>
 															<c:if
 																test="${sessionScope.memberRole.contains('ROLE_EDIT') and !member.role.equals('ROLE_ADMIN') }">
 																<td><a href="${contextPath }/update/${member.id }">
-																		<button type="button" class="btn btn-primary">更新</button>
-																</a></td>
+																		${status.index+1 + members.size*members.number } </a></td>
+															</c:if>
+															<c:if
+																test="${sessionScope.memberRole.contains('ROLE_EDIT') and member.role.equals('ROLE_ADMIN') }">
+																<td>${status.index+1 + members.size*members.number }</td>
 															</c:if>
 														</c:if>
+														<c:if
+															test="${memberEmail.equals(member.email) or sessionScope.memberRole.contains('ROLE_VIEW') }">
+															<td>${status.index+1 + members.size*members.number }</td>
+														</c:if>
+														<td>${fn:escapeXml(member.username) }</td>
+														<td>${fn:escapeXml(member.email) }</td>
+														<td>${member.phoneNumber }</td>
+														<td>${member.role }</td>
 													</tr>
 												</c:forEach>
 											</tbody>
@@ -97,7 +98,9 @@
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${pageNumber}" />
-											                        <c:param name="searchString" value="${searchString}" />
+																	<c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
 											                    </c:url>"
 																	class="page-link"> <c:out value="${pageNumber}" />
 																</a></li>
@@ -108,7 +111,9 @@
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${currentPage+1}" />
-											                        <c:param name="searchString" value="${searchString}" />
+											                        <c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
 											                    </c:url>"
 																	class="page-link">&gt&gt</a></li>
 															</c:if>
@@ -122,7 +127,9 @@
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${currentPage-1}" />
-											                        <c:param name="searchString" value="${searchString}" />
+											                        <c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
 											                    </c:url>"
 																	class="page-link">&lt&lt</a></li>
 															</c:if>
@@ -134,7 +141,9 @@
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${pageNumber}" />
-											                        <c:param name="searchString" value="${searchString}" />
+											                        <<c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
 											                    </c:url>"
 																	class="page-link"> <c:out value="${pageNumber}" />
 																</a></li>
@@ -145,7 +154,9 @@
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${currentPage+1}" />
-											                        <c:param name="searchString" value="${searchString}" />
+											                        <c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
 											                    </c:url>"
 																	class="page-link">&gt&gt</a></li>
 															</c:if>
@@ -160,7 +171,9 @@
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${pageNumber}" />
-											                        <c:param name="searchString" value="${searchString}" />
+											                        <c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
 											                    </c:url>"
 																	class="page-link"> <c:out value="${pageNumber}" />
 																</a></li>
@@ -170,7 +183,9 @@
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${currentPage-1}" />
-											                        <c:param name="searchString" value="${searchString}" />
+											                        <c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
 											                    </c:url>"
 																	class="page-link">&lt&lt</a></li>
 															</c:if>

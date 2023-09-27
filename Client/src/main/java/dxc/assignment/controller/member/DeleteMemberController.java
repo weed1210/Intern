@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -72,7 +73,7 @@ public class DeleteMemberController {
 
 	// Delete the member
 	@PostMapping("/confirmDelete/{id}")
-	public String confirmRegister(@PathVariable int id, HttpSession session,
+	public String confirmRegister(@Valid @PathVariable int id, HttpSession session,
 			RedirectAttributes redirectAttributes) {
 		String authHeader = (String) session.getAttribute("authHeader");
 
