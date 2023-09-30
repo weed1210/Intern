@@ -49,6 +49,7 @@ public class AddMemberController {
 			BindingResult bindingResult, HttpSession session, ModelMap modelMap)
 			throws AuthException {
 		if (bindingResult.hasErrors()) {
+			modelMap.addAttribute("errors", bindingResult.getAllErrors());
 			return "register";
 		}
 

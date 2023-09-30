@@ -11,9 +11,13 @@
 	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
 		<div class="navbar-collapse collapse row" id="navbarSupportedContent"
 			data-navbarbg="skin5">
-			<div class="col-2"></div>
-			<div class="col-2 ms-5 box-title">${param.pageHeader }</div>
-			<div class="col-4"></div>
+			<div class="col-1 box-title ms-5">新規会員追加</div>
+			<div class="col-1">
+				<c:if test="${!memberRole.equals('ROLE_VIEW') }">
+					<a href="${contextPath }/register" class="btn d-grid">追加</a>
+				</c:if>
+			</div>
+			<div class="col-6"></div>
 			<!-- ============================================================== -->
 			<!-- Right side toggle and nav items -->
 			<!-- ============================================================== -->

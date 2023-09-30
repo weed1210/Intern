@@ -22,6 +22,7 @@ public class JwtProvider {
 	private final long JWT_EXPIRATION = 1000*60*60;
 
 	public String generateToken(UserDetails userDetails) {
+		System.out.println("generating");
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
 		// User identified by email. get username return email because the user detail
@@ -45,8 +46,10 @@ public class JwtProvider {
 	}
 
 	public boolean validateToken(String authToken) {
+		System.out.println("JwtProvider: validating " + authToken);
 		try {
 			Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authToken);
+			System.out.println("Validate success");
 			return true;
 		} catch (MalformedJwtException ex) {
 			System.out.println("Invalid JWT token");

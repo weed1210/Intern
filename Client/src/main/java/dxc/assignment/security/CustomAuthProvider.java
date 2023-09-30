@@ -42,15 +42,17 @@ public class CustomAuthProvider implements AuthenticationProvider {
 					.authenticate(new LoginRequest(email, password));
 			if (authResponse.isSuccessful()) {
 				jwtToken = authResponse.body().getJwtToken();
+				System.out.println("CustomAuthProvider: jwt - " + jwtToken);
 			} else {
 				return null;
 			}
 
 			// Call api for member with email
-			Response<Member> memberResponse = memberService.selectByEmail(email,
+			Response<Member> memberResponse = memberService.selectSuperByEmail(email,
 					"Bearer " + jwtToken);
 			if (memberResponse.isSuccessful()) {
 				Member member = memberResponse.body();
+				System.out.println("CustomAuthProvider: user " + member.getEmail());
 				UserDetails user = User.builder()
 						.username(member.getEmail())
 						.password(member.getPassword())
@@ -63,6 +65,8 @@ public class CustomAuthProvider implements AuthenticationProvider {
 						new CustomPrincipal(email, jwtToken), password,
 						user.getAuthorities());
 			} else {
+				System.out.println("CustomAuthProvider: get user detail fail");
+				System.out.println(memberResponse.code());
 				return null;
 			}
 		} catch (IOException e) {

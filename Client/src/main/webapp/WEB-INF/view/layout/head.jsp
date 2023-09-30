@@ -23,7 +23,7 @@
 	href="${resourcePath}/plugins/images/favicon.png">
 <!-- Custom CSS -->
 <link href="${resourcePath}/css/style.min.css" rel="stylesheet">
-
+<link href="${resourcePath}/css/custom.css" rel="stylesheet">
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

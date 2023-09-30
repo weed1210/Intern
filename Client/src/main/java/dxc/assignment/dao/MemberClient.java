@@ -26,6 +26,10 @@ public interface MemberClient {
 	@GET("members/email/{email}")
 	Call<Member> selectByEmail(@Path("email") String email,
 			@Header("Authorization") String authHeader);
+	
+	@GET("members/super/{email}")
+	Call<Member> selectSuperByEmail(@Path("email") String email,
+			@Header("Authorization") String authHeader);
 
 	@Headers({"Accept: application/json"})
 	@POST("members")

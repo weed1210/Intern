@@ -17,13 +17,14 @@ import dxc.assignment.mapper.MemberMapper;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-	private MemberMapper memberMapper;
 	private JwtAuthFilter jwtAuthFilter;
+	private SecurityHelper securityHelper;
 	private MemberDetailService memberDetailService;
 
-	public SecurityConfig(MemberMapper memberMapper, JwtProvider jwtProvider) {
-		this.memberMapper = memberMapper;
-		this.memberDetailService = new MemberDetailService(memberMapper);
+	public SecurityConfig(JwtProvider jwtProvider,
+			SecurityHelper securityHelper) {
+		this.securityHelper = securityHelper;
+		this.memberDetailService = new MemberDetailService(securityHelper);
 		this.jwtAuthFilter = new JwtAuthFilter(jwtProvider, memberDetailService);
 	}
 
@@ -41,14 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// DI the custom detail service
 	@Bean
 	public MemberDetailService springDataUserDetailsService() {
-		return new MemberDetailService(memberMapper);
+		return new MemberDetailService(securityHelper);
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
 		// Set user defined detail service and password encoder
-		auth.userDetailsService(new MemberDetailService(memberMapper)) 
+		auth.userDetailsService(new MemberDetailService(securityHelper))
 				.passwordEncoder(passwordEncoder());
 	}
 
@@ -59,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/auth/login").permitAll()
 				.anyRequest().authenticated();
-		
+
 		// Not required csrf
 		http.csrf().disable();
 

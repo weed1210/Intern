@@ -11,6 +11,7 @@
 <c:set var="maxPage" value="${5 }" />
 <c:set var="halfPage" value="${3 }" />
 <c:set var="currentPage" value="${members.number + 1 }" />
+<c:set var="memberRole" value="${sessionScope.memberRole }" />
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -27,24 +28,31 @@
 	<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5"
 		data-sidebartype="full" data-sidebar-position="absolute"
 		data-header-position="absolute" data-boxed-layout="full">
-		<c:import url="layout/header.jsp" />
-		<c:import url="layout/sidebar.jsp" />
+		<c:import url="layout/indexHeader.jsp" />
 		<div class="page-wrapper">
-			<div class="container-fluid">
+			<div class="container-fluid" style="height: 91vh;">
 				<!-- ============================================================== -->
 				<!-- Start Page Content -->
 				<!-- ============================================================== -->
 				<div class="row">
 					<div class="col-sm-12">
-						<div class="white-box">
-							<h3 class="box-title">会員管理</h3>
+						<div>
+							<div class="box-title">名前で会員を検索します。</div>
+							<div class="row mb-3">
+								<form action="${contextPath }/" id="search_form">
+									<input type="text"
+										name="searchString" value="${searchString }"
+										class="search-input col-2">
+									<button class="btn col-1">検索</button>
+								</form>
+							</div>
 							<div class="table-responsive">
 								<c:choose>
 									<c:when test="${members.getNumberOfElements() > 0 }">
-										<table class="table text-nowrap">
+										<table class="table text-nowrap table-bordered">
 											<thead>
 												<tr>
-													<th class="border-top-0"></th>
+													<th class="border-top-0">Id</th>
 													<th class="border-top-0">名前</th>
 													<th class="border-top-0">メール</th>
 													<th class="border-top-0">電話番号</th>
@@ -52,7 +60,6 @@
 												</tr>
 											</thead>
 											<tbody>
-
 												<c:forEach var="member" items="${members.content}"
 													varStatus="status">
 													<tr>
@@ -78,13 +85,13 @@
 														</c:if>
 														<td>${fn:escapeXml(member.username) }</td>
 														<td>${fn:escapeXml(member.email) }</td>
-														<td>${member.phoneNumber }</td>
+														<td>${member.phoneNumber.replaceFirst("(\\d{4})(\\d{3})(\\d+)", "$1-$2-$3") }</td>
 														<td>${member.role }</td>
 													</tr>
 												</c:forEach>
 											</tbody>
 										</table>
-										<div class="container">
+										<div class="container pagination-container">
 											<ul class="pagination justify-content-end pagination-sm">
 												<c:if test="${members.totalPages > 0}">
 													<c:forEach var="pageNumber" begin="1"
@@ -195,7 +202,9 @@
 											</ul>
 										</div>
 									</c:when>
-									<c:otherwise>データなし</c:otherwise>
+									<c:otherwise>
+										<div class="error-message">データなし</div>
+									</c:otherwise>
 								</c:choose>
 							</div>
 						</div>
@@ -204,7 +213,6 @@
 				<!-- ============================================================== -->
 				<!-- End Page Content -->
 			</div>
-			<c:import url="layout/footer.jsp" />
 		</div>
 	</div>
 	<c:import url="layout/script.jsp" />

@@ -37,6 +37,12 @@ public class MemberService {
 		return checkForForbiddenError(
 				memberClient.selectByEmail(email, authHeader).execute());
 	}
+	
+	public Response<Member> selectSuperByEmail(String email, String authHeader)
+			throws IOException, ForbiddenException {
+		return checkForForbiddenError(
+				memberClient.selectSuperByEmail(email, authHeader).execute());
+	}
 
 	public Response<Void> insert(Member member, String authHeader)
 			throws IOException, ForbiddenException {

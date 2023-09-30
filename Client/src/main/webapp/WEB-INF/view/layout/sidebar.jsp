@@ -13,23 +13,22 @@
 		<!-- Sidebar navigation-->
 		<nav class="sidebar-nav">
 			<ul id="sidebarnav">
-				<li class="sidebar-item"><a
+				<!--  <li class="sidebar-item"><a
 					class="sidebar-link waves-effect waves-dark sidebar-link"
 					href="${contextPath }/" aria-expanded="false"> <i
 						class="fa fa-table" aria-hidden="true"></i> <span
 						class="hide-menu">ホーム</span>
-				</a></li>
+				</a></li> -->
 				<c:if test="${!memberRole.equals('ROLE_VIEW') }">
-					<li class="sidebar-item"><a
-						class="sidebar-link waves-effect waves-dark sidebar-link"
-						href="${contextPath }/register" aria-expanded="false"> <i
-							class="fa fa-user" aria-hidden="true"></i> <span
-							class="hide-menu">追加</span>
-					</a></li>
+					<li class="sidebar-item"><a class="sidebar-link" href="#"
+						aria-expanded="false"><span class="hide-menu">新規会員追加</span> </a></li>
+				</c:if>
+				<c:if test="${!memberRole.equals('ROLE_VIEW') }">
+					<li class="text-center p-20 upgrade-btn"><a
+						href="${contextPath }/register" class="btn d-grid" target="_blank">追加</a></li>
 				</c:if>
 				<li class="text-center p-20 upgrade-btn"><a
-					href="${contextPath }/logout"
-					class="btn d-grid btn-danger text-white" target="_blank">ログアウト</a></li>
+					href="${contextPath }/logout" class="btn d-grid" target="_blank">ログアウト</a></li>
 			</ul>
 
 		</nav>

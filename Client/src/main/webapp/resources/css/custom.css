@@ -1,0 +1,116 @@
+table tr:nth-child(odd) td {
+	background-color: #f2f2f2;
+}
+
+body {
+	background-color: #f2f2f2 !important;
+}
+
+thead {
+	color: #23507a;
+	background-color: #d6dce5;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+.table {
+	border: 2px solid;
+}
+
+.button {
+	background-color: #9dc3e6;
+	/* Green */
+	color: #23507a;
+	font-size: 15px !important;
+	font-weight: bold;
+}
+
+.btn {
+	background-color: #9dc3e6;
+	/* Green */
+	color: #23507a;
+	border: 2px solid #3f464d;
+	border-radius: 5%;
+	font-size: 15px !important;
+	font-weight: bold;
+}
+
+.error-message {
+	color: #fc0404;
+}
+
+.pagination-container>* {
+	border: none;
+}
+
+.page-link {
+	border: none;
+	text-decoration: underline
+}
+
+.compulsary {
+	color: #fc0404;
+}
+
+.page-wrapper {
+	margin-left: 0px !important;
+}
+
+#main-wrapper[data-layout=horizontal] .topbar .navbar-collapse[data-navbarbg=skin5],
+#main-wrapper[data-layout=horizontal] .topbar[data-navbarbg=skin5],
+#main-wrapper[data-layout=vertical] .topbar .navbar-collapse[data-navbarbg=skin5],
+#main-wrapper[data-layout=vertical] .topbar[data-navbarbg=skin5] {
+	background: #f2f2f2;
+}
+
+.search-input {
+	border: 2px solid black !important;
+	border-radius: 5% !important;
+}
+
+.box-title {
+	font-size: 15px !important;
+	font-weight: bold !important;
+	color: #052464;
+}
+
+.card {
+	background: #f2f2f2 !important;
+	padding-left: 20%;
+	padding-right: 20%;
+}
+
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+	background: #f2f2f2;
+}
+
+.page-link {
+	background-color: #f2f2f2;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    font-weight: bold;
+    color: #0d6efd;
+    background-color: #f2f2f2;
+    border-color: #f2f2f2;
+}
+
+.form-input {
+	background: white;
+	border: 1px solid #404040;
+}
+
+.form-control {
+	background: white !important;
+	padding: 5px !important;
+	border: 2px solid #404040 !important;
+}
+
+.form-select {
+	background: white !important;
+	padding: 5px !important;
+	border: 2px solid #404040 !important;
+}

@@ -151,5 +151,13 @@
 	</dependencies>
 	<build>
 		<finalName>Application</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>login.txt</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 </project>

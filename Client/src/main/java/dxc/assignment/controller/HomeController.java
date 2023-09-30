@@ -97,12 +97,14 @@ public class HomeController {
 		session.setAttribute("authHeader", "Bearer " + principal.getJwtToken());
 		session.setAttribute("memberEmail", principal.getName());
 		session.setAttribute("memberRole", roles.get(0));
+		System.out.println("Login success - principal.getName()");
 
 		return "redirect:/";
 	}
 
 	@GetMapping("/login-error")
 	public String loginError(ModelMap model) {
+		System.out.println("Login fail");
 		model.addAttribute("loginError", "Invalid email or password");
 		return "login";
 	}

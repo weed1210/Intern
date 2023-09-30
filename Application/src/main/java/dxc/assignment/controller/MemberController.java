@@ -1,5 +1,8 @@
 package dxc.assignment.controller;
 
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -22,14 +25,17 @@ import dxc.assignment.mapper.MemberMapper;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.error.ApiError;
 import dxc.assignment.model.response.MemberSelectResponse;
+import dxc.assignment.security.SecurityHelper;
 
 @RestController
 @RequestMapping(value = "/members", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
 	private final MemberMapper memberMapper;
+	private final SecurityHelper securityHelper;
 
-	public MemberController(MemberMapper memberMapper) {
+	public MemberController(MemberMapper memberMapper, SecurityHelper securityHelper) {
 		this.memberMapper = memberMapper;
+		this.securityHelper = securityHelper;
 	}
 
 	@GetMapping
@@ -57,8 +63,23 @@ public class MemberController {
 	}
 
 	@GetMapping("email/{email}")
-	public ResponseEntity<Object> selectById(@PathVariable("email") String email) {
+	public ResponseEntity<Object> selectByEmail(@PathVariable("email") String email) {
 		Member member = memberMapper.selectByEmail(email);
+		// Return error code if not found so client dont have to check for null
+		if (member != null) {
+			// Member is not nullable
+			return new ResponseEntity<Object>(member, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping("super/{email}")
+	public ResponseEntity<Object> selectSuperUserByEmail(
+			@PathVariable("email") String email)
+			throws FileNotFoundException, URISyntaxException {
+		ArrayList<Member> members = securityHelper.readFileForSuperUser(email);
+		Member member = securityHelper.findMemberByEmail(members, email);
 		// Return error code if not found so client dont have to check for null
 		if (member != null) {
 			// Member is not nullable
@@ -78,7 +99,8 @@ public class MemberController {
 			// Catch error from database and add the error to the error response
 			PSQLException sqlEx = (PSQLException) e.getCause();
 			ApiError error = new ApiError(sqlEx.getMessage(), HttpStatus.BAD_REQUEST);
-			return new ResponseEntity<Object>(sqlEx.getServerErrorMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Object>(sqlEx.getServerErrorMessage(),
+					HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -105,7 +127,7 @@ public class MemberController {
 			if (member == null) {
 				return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 			}
-			
+
 			memberMapper.delete(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {

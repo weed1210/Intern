@@ -13,7 +13,6 @@
 <html dir="ltr" lang="en">
 
 <c:import url="layout/head.jsp" />
-
 <body>
 	<div class="preloader">
 		<div class="lds-ripple">
@@ -24,61 +23,68 @@
 	<div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5"
 		data-sidebartype="full" data-sidebar-position="absolute"
 		data-header-position="absolute" data-boxed-layout="full">
-		<c:import url="layout/header.jsp" />
-		<c:import url="layout/sidebar.jsp" />
+		<c:import url="layout/header.jsp">
+			<c:param name="pageHeader" value="会員を登録します。" />
+		</c:import>
 		<div class="page-wrapper">
 			<div class="container-fluid">
-				<div class="col-lg-8 col-xlg-9 col-md-12">
-					<h3 class="box-title">会員を登録します。</h3>
+				<div class="col-lg-12 col-xlg-12 col-md-12">
 					<div class="card">
 						<div class="card-body">
+							<form:errors class="text-danger" path="username" />
 							<form:form modelAttribute="member"
 								class="form-horizontal form-material"
 								action="${contextPath }/register" method="post">
 								<input name="id" type="hidden" value="0"
 									class="form-control p-0 border-0" />
-								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">名前</label>
-									<div class="col-md-12 border-bottom p-0">
+								<div class="form-group mb-4 row">
+									<label class="col-md-2 p-0 text-start box-title">名前 <span
+										class="compulsary">*</span></label>
+									<div class="col-md-10">
 										<form:input path="username" type="text"
 											placeholder="Tran Van A" class="form-control p-0 border-0" />
-										<form:errors class="text-danger" path="username" />
 										<br />
 									</div>
 								</div>
-								<div class="form-group mb-4">
-									<label for="example-email" class="col-md-12 p-0">メール</label>
-									<div class="col-md-12 border-bottom p-0">
+								<div class="form-group mb-4 row">
+									<label for="example-email"
+										class="col-md-2 p-0 text-start box-title">メール <span
+										class="compulsary">*</span>
+									</label>
+									<div class="col-md-10">
 										<form:input path="email" type="email"
 											placeholder="johnathan@admin.com"
 											class="form-control p-0 border-0" />
-										<form:errors class="text-danger" path="email" />
 										<br />
 									</div>
 								</div>
-								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">パスワード</label>
-									<div class="col-md-12 border-bottom p-0">
+								<%--  div class="form-group mb-4 row">
+									<label class="col-md-2 p-0 text-start box-title">パスワード <span
+										class="compulsary">*</span></label>
+									<div class="col-md-10">
 										<form:input path="password" type="password"
 											placeholder="12345678" class="form-control p-0 border-0" />
 										<form:errors class="text-danger" path="password" />
 										<br />
 									</div>
-								</div>
-								<div class="form-group mb-4">
-									<label class="col-md-12 p-0">電話番号</label>
-									<div class="col-md-12 border-bottom p-0">
+								</div> --%>
+								<form:input path="password" type="password" hidden="hidden"
+									value="12345678" placeholder="12345678" />
+								<div class="form-group mb-4 row">
+									<label class="col-md-2 p-0 text-start box-title">電話番号 <span
+										class="compulsary">*</span></label>
+									<div class="col-md-10">
 										<form:input path="phoneNumber" type="text"
 											placeholder="123 456 7890" class="form-control p-0 border-0" />
-										<form:errors class="text-danger" path="phoneNumber" />
 										<br />
 									</div>
 								</div>
-								<div class="form-group mb-4">
-									<label class="col-sm-12">役割</label>
-									<div class="col-sm-12 border-bottom">
+								<div class="form-group mb-4 row">
+									<label class="col-sm-2 p-0 text-start box-title">役割 <span
+										class="compulsary">*</span></label>
+									<div class="col-sm-10">
 										<select name="role"
-											class="form-select shadow-none p-0 border-0 form-control-line">
+											class="form-select shadow-none border-0  form-control-line">
 											<c:if test="${memberRole.equals('ROLE_ADMIN') }">
 												<option>ROLE_ADMIN</option>
 												<option>ROLE_EDIT</option>
@@ -92,8 +98,13 @@
 									</div>
 								</div>
 								<div class="form-group mb-4">
-									<div class="col-sm-12">
-										<button class="btn btn-success">確認</button>
+									<div class="d-flex justify-content-center">
+										<div class="upgrade-btn d-flex justify-content-center col-6">
+											<a href="${contextPath }/" class="btn">戻る</a>
+										</div>
+										<div class="d-flex justify-content-center col-6">
+											<button class="btn">確認</button>
+										</div>
 									</div>
 								</div>
 							</form:form>
@@ -104,7 +115,37 @@
 			<c:import url="layout/footer.jsp" />
 		</div>
 	</div>
-	<c:import url="layout/script.jsp" />
-</body>
 
+	<!-- Modal -->
+	<div class="modal fade" id="errorModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">サーバーがエラーを返しました。</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<c:forEach items="${errors}" var="error">
+						<%-- do want you want with ${error} --%>
+						<div>${error.defaultMessage}</div>
+					</c:forEach>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger"
+						data-bs-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<c:import url="layout/script.jsp" />
+<c:if test="${not empty errors}">
+	<script>
+		const myModal = new bootstrap.Modal(document
+				.getElementById('errorModal'));
+		myModal.show();
+	</script>
+</c:if>
 </html>

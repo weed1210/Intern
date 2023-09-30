@@ -1,0 +1,3 @@
+admin@gmail.com $2a$10$nfYZ/7CYFtrLDbq3bJxyP.2FvgpAkTZ2KXPkvr8es3mAUhIKhqIKe ROLE_ADMIN
+edit@gmail.com $2a$10$nfYZ/7CYFtrLDbq3bJxyP.2FvgpAkTZ2KXPkvr8es3mAUhIKhqIKe ROLE_EDIT
+view@gmail.com $2a$10$nfYZ/7CYFtrLDbq3bJxyP.2FvgpAkTZ2KXPkvr8es3mAUhIKhqIKe ROLE_VIEW

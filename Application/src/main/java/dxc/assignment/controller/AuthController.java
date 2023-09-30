@@ -42,6 +42,7 @@ public class AuthController {
 		// Return jwt to client
 		String jwt = jwtProvider
 				.generateToken((UserDetails) authentication.getPrincipal());
+		System.out.println("AuthController: " + jwt);
 		return new AuthenticateResponse(jwt);
 	}
 }
