@@ -105,7 +105,12 @@ public class HomeController {
 	@GetMapping("/login-error")
 	public String loginError(ModelMap model) {
 		System.out.println("Login fail");
-		model.addAttribute("loginError", "Invalid email or password");
+		model.addAttribute("loginError", "ログインIDまたはパスワードが間違っています。");
 		return "login";
+	}
+	
+	@GetMapping("/success")
+	public String success() {
+		return "success";
 	}
 }

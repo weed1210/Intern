@@ -36,64 +36,58 @@
 						<div>
 							<form class="cform-horizontal form-material"
 								action="${contextPath }/${confirmAction }" method="post">
-								<table>
-									<input id="id" name="id" type="hidden" value="${member.id }"
-										class="form-control p-0 border-0">
-									<div class="form-group mb-4">
-										<label class="col-md-12 p-0">名前</label>
-										<div class="col-md-12 border-bottom p-0">
-											<input readonly name="username" type="text"
-												placeholder="Username" value="${member.username }"
-												class="form-control p-0 border-0">
-										</div>
-									</div>
-									<div class="form-group mb-4">
-										<label for="example-email" class="col-md-12 p-0">メール</label>
-										<div class="col-md-12 border-bottom p-0">
-											<input readonly name="email" type="email"
-												placeholder="johnathan@admin.com" value="${member.email }"
-												class="form-control p-0 border-0" name="example-email">
-										</div>
-									</div>
-									<%-- <div class="form-group mb-4">
-									<label class="col-md-12 p-0">パスワード</label>
-									<div class="col-md-12 border-bottom p-0">
-										<input readonly name="password" type="password"
-											placeholder="古いパスワード" value="${member.password }"
-											class="form-control p-0 border-0">
-									</div>
-								</div> --%>
-									<input readonly name="password" type="password" hidden
-										placeholder="古いパスワード" value="${member.password }"
-										class="form-control p-0 border-0">
-									<div class="form-group mb-4">
-										<label class="col-md-12 p-0">電話番号</label>
-										<div class="col-md-12 border-bottom p-0">
-											<input readonly name="phoneNumber" type="text"
-												placeholder="123 456 7890" value="${member.phoneNumber }"
-												class="form-control p-0 border-0">
-										</div>
-									</div>
-									<div class="form-group mb-4">
-										<label class="col-md-12 p-0">役割</label>
-										<div class="col-md-12 border-bottom p-0">
-											<input readonly name="role" type="text"
-												placeholder="123 456 7890" value="${member.role }"
-												class="form-control p-0 border-0">
-										</div>
-									</div>
-									<div class="form-group mb-4">
-										<div class="col-sm-12 row">
-											<div class="col-sm-9">
-												<button class="btn btn-success">確認</button>
-											</div>
-											<div class="col-sm-3">
-												<button formaction="${contextPath }/${cancelAction }"
-													formmethod="get" class="btn btn-danger">戻る</button>
-											</div>
-										</div>
-									</div>
+								<input id="id" name="id" type="hidden" value="${member.id }"
+									class="p-0 border-0"> <input name="password"
+									type="password" hidden="hidden" value="${member.password }"
+									class="form-control p-0 border-0">
+								<table class="table text-nowrap table-bordered"
+									style="width: 100%">
+									<tr class="form-group mb-4">
+										<td width="30%"><label class="col-md-12 p-0">名前</label></td>
+										<td width="70%"><input readonly name="username"
+											type="text" placeholder="Username"
+											value="${member.username }"
+											class="table-display p-0 border-0"></td>
+									</tr>
+									<tr class="form-group mb-4">
+										<td><label for="example-email" class="p-0">メール</label></td>
+										<td><input readonly name="email" type="email"
+											placeholder="johnathan@admin.com" value="${member.email }"
+											class="table-display p-0 border-0" name="example-email"></td>
+									</tr>
+									<tr class="form-group mb-4">
+										<td><label class="col-md-12 p-0">電話番号</label></td>
+										<td><input readonly name="phoneNumber" type="text"
+											placeholder="123 456 7890"
+											value="${member.phoneNumber.replaceFirst('(\\d{4})(\\d{3})(\\d+)', '$1-$2-$3') }"
+											class="table-display p-0 border-0" disabled> 
+											<input
+											readonly name="phoneNumber"
+											placeholder="123 456 7890"
+											value="${member.phoneNumber }"
+											class="table-display p-0 border-0" type="hidden"></td>
+
+									</tr>
+									<tr class="form-group mb-4">
+										<td><label class="col-md-12 p-0">役割</label></td>
+										<td><input readonly name="role" type="text"
+											placeholder="123 456 7890" value="${member.role }"
+											class="table-display p-0 border-0"></td>
+									</tr>
 								</table>
+								<div class="form-group mt-5">
+									<div class="col-sm-12 row">
+										<div class="d-flex justify-content-center">
+											<div class="d-flex justify-content-center col-6">
+												<button formaction="${contextPath }/${cancelAction }"
+													formmethod="get" class="btn">戻る</button>
+											</div>
+											<div class="upgrade-btn d-flex justify-content-center col-6">
+												<button class="btn">${buttonConfirm }</button>
+											</div>
+										</div>
+									</div>
+								</div>
 							</form>
 						</div>
 					</div>

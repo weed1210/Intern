@@ -23,7 +23,7 @@
 			<!-- ============================================================== -->
 			<ul class="navbar-nav ms-auto d-flex col-2 ms-5">
 				<li class="text-center p-20 upgrade-btn"><a
-					href="${contextPath }/logout" class="btn d-grid" target="_blank">ログアウト</a></li>
+					href="${contextPath }/logout" class="btn d-grid">ログアウト</a></li>
 			</ul>
 		</div>
 	</nav>

@@ -77,7 +77,7 @@ public class HomeControllerTest {
 		Response<MemberSelectResponse> response = mock(Response.class);
 		when(response.isSuccessful()).thenReturn(true);
 		when(response.body()).thenReturn(new MemberSelectResponse(members, 100));
-		when(memberService.select("", 1, 10, "Bearer token"))
+		when(memberService.select("", 1, 5, "Bearer token"))
 				.thenReturn(response);
 
 		mockMvc.perform(get("/")
@@ -94,7 +94,7 @@ public class HomeControllerTest {
 	public void testGetIndexUnsuccessResponse() throws Exception {
 		Response<MemberSelectResponse> response = mock(Response.class);
 		when(response.isSuccessful()).thenReturn(false);
-		when(memberService.select("", 1, 10, "Bearer token"))
+		when(memberService.select("", 1, 5, "Bearer token"))
 				.thenReturn(response);
 
 		mockMvc.perform(get("/")
@@ -141,6 +141,6 @@ public class HomeControllerTest {
 				.andReturn();
 
 		ModelMap model = result.getModelAndView().getModelMap();
-		assertEquals("Invalid email or password", model.getAttribute("loginError"));
+		assertEquals("ログインIDまたはパスワードが間違っています。", model.getAttribute("loginError"));
 	}
 }

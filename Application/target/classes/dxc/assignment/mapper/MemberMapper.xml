@@ -53,6 +53,7 @@
 		UPDATE members
 		<set>
 			username = #{username},
+			email = #{email},
 			phone_number = #{phoneNumber},
 			role = #{role},
 			<if test="password != null and password.trim() != ''">password = #{passwordHash}</if>

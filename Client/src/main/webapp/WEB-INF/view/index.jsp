@@ -40,8 +40,7 @@
 							<div class="box-title">名前で会員を検索します。</div>
 							<div class="row mb-3">
 								<form action="${contextPath }/" id="search_form">
-									<input type="text"
-										name="searchString" value="${searchString }"
+									<input type="text" name="searchString" value="${searchString }"
 										class="search-input col-2">
 									<button class="btn col-1">検索</button>
 								</form>
@@ -60,35 +59,22 @@
 												</tr>
 											</thead>
 											<tbody>
-												<c:forEach var="member" items="${members.content}"
-													varStatus="status">
-													<tr>
-														<c:if test="${!memberEmail.equals(member.email)}">
-															<c:if
-																test="${sessionScope.memberRole.contains('ROLE_ADMIN') }">
-																<td><a href="${contextPath }/update/${member.id }">
-																		${status.index+1 + members.size*members.number } </a></td>
-															</c:if>
-															<c:if
-																test="${sessionScope.memberRole.contains('ROLE_EDIT') and !member.role.equals('ROLE_ADMIN') }">
-																<td><a href="${contextPath }/update/${member.id }">
-																		${status.index+1 + members.size*members.number } </a></td>
-															</c:if>
-															<c:if
-																test="${sessionScope.memberRole.contains('ROLE_EDIT') and member.role.equals('ROLE_ADMIN') }">
-																<td>${status.index+1 + members.size*members.number }</td>
-															</c:if>
-														</c:if>
+												<c:if test="${!memberRole.contains('ROLE_VIEW') }">
+													<c:forEach var="member" items="${members.content}"
+														varStatus="status">
 														<c:if
-															test="${memberEmail.equals(member.email) or sessionScope.memberRole.contains('ROLE_VIEW') }">
-															<td>${status.index+1 + members.size*members.number }</td>
+															test="${memberRole.contains('ROLE_ADMIN') || memberRole.contains('ROLE_EDIT') && !member.role.contains('ROLE_ADMIN') }">
+															<tr>
+																<td><a href="${contextPath }/update/${member.id }">
+																		${status.index+1 + members.size*members.number } </a></td>
+																<td>${fn:escapeXml(member.username) }</td>
+																<td>${fn:escapeXml(member.email) }</td>
+																<td>${member.phoneNumber.replaceFirst("(\\d{4})(\\d{3})(\\d+)", "$1-$2-$3") }</td>
+																<td>${member.role }</td>
+															</tr>
 														</c:if>
-														<td>${fn:escapeXml(member.username) }</td>
-														<td>${fn:escapeXml(member.email) }</td>
-														<td>${member.phoneNumber.replaceFirst("(\\d{4})(\\d{3})(\\d+)", "$1-$2-$3") }</td>
-														<td>${member.role }</td>
-													</tr>
-												</c:forEach>
+													</c:forEach>
+												</c:if>
 											</tbody>
 										</table>
 										<div class="container pagination-container">

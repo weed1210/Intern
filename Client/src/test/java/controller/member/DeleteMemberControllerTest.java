@@ -162,7 +162,7 @@ public class DeleteMemberControllerTest {
 				.with(authentication(MemberSecurityHelper.getAdminUser()))
 				.sessionAttr("authHeader", "Bearer token"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/"))
+				.andExpect(view().name("redirect:/success"))
 				.andExpect(flash().attribute("successMessage", "削除が完了しました。"));
 	}
 

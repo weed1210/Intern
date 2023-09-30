@@ -76,6 +76,7 @@ public class AddMemberController {
 		// Set the information for confirm page
 		model.addAttribute("member", member);
 		model.addAttribute("title", "会員を登録します");
+		model.addAttribute("buttonConfirm", "登録");
 		model.addAttribute("prompt", "この内容でよろしければ、「登録」ボタンをクリックしてください。");
 		model.addAttribute("confirmAction", "confirmRegister");
 		model.addAttribute("cancelAction", "cancelRegister");
@@ -103,7 +104,7 @@ public class AddMemberController {
 			if (response.isSuccessful()) {
 				redirectAttributes.addFlashAttribute("successMessage",
 						"登録が完了しました。");
-				return "redirect:/";
+				return "redirect:/success";
 			} else {
 				// On server return error
 				// Get error from server response

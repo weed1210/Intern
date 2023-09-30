@@ -230,7 +230,7 @@ public class UpdateMemberControllerTest {
 		assertThat(model.getAttribute("member"))
 				.usingRecursiveComparison()
 				.isEqualTo(validTestMember);
-		assertEquals("会員を編集します", model.getAttribute("title"));
+		assertEquals("会員を更新します。", model.getAttribute("title"));
 		assertEquals("confirmUpdate", model.getAttribute("confirmAction"));
 		assertEquals("cancelUpdate/" + validTestMember.getId(),
 				model.getAttribute("cancelAction"));
@@ -264,7 +264,7 @@ public class UpdateMemberControllerTest {
 				.sessionAttr("authHeader", "Bearer token")
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/"))
+				.andExpect(view().name("redirect:/success"))
 				.andExpect(flash().attribute("successMessage", "更新が完了しました。"));
 	}
 

@@ -56,6 +56,8 @@ public class DeleteMemberController {
 				// Set the information for delete confimation page
 				model.addAttribute("member", member);
 				model.addAttribute("title", "会員を削除します");
+				model.addAttribute("buttonConfirm", "OK");
+				model.addAttribute("prompt", "この内容でよろしければ、「OK」ボタンをクリックしてください。");
 				model.addAttribute("confirmAction", "confirmDelete/" + member.getId());
 				model.addAttribute("cancelAction", "update/" + member.getId());
 				return "confirm";
@@ -82,7 +84,7 @@ public class DeleteMemberController {
 			if (response.isSuccessful()) {
 				redirectAttributes.addFlashAttribute("successMessage",
 						"削除が完了しました。");
-				return "redirect:/";
+				return "redirect:/success";
 			} else {
 				// On server return error
 				// Get error from server response

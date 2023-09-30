@@ -100,7 +100,9 @@ public class UpdateMemberController {
 
 		// Set the information for update page
 		model.addAttribute("member", member);
-		model.addAttribute("title", "会員を編集します");
+		model.addAttribute("title", "会員を更新します。");
+		model.addAttribute("buttonConfirm", "OK");
+		model.addAttribute("prompt", "この内容でよろしければ、「OK」ボタンをクリックしてください。");
 		model.addAttribute("confirmAction", "confirmUpdate");
 		model.addAttribute("cancelAction", "cancelUpdate/" + member.getId());
 		return "confirm";
@@ -126,7 +128,7 @@ public class UpdateMemberController {
 			if (response.isSuccessful()) {
 				redirectAttributes.addFlashAttribute("successMessage",
 						"更新が完了しました。");
-				return "redirect:/";
+				return "redirect:/success";
 			} else {
 				redirectAttributes.addFlashAttribute("confirmError",
 						"更新中にエラーが発生しました。");

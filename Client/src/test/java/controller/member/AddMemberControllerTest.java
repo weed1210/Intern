@@ -226,6 +226,6 @@ public class AddMemberControllerTest {
 				.sessionAttr("authHeader", "Bearer token")
 				.flashAttr("member", validTestMember))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/"));
+				.andExpect(view().name("redirect:/success"));
 	}
 }
