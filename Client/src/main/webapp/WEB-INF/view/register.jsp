@@ -80,8 +80,7 @@
 									</div>
 								</div>
 								<div class="form-group mb-4 row">
-									<label class="col-sm-2 p-0 text-start box-title">役割 <span
-										class="compulsary">*</span></label>
+									<label class="col-sm-2 p-0 text-start box-title">役割</label>
 									<div class="col-sm-10">
 										<select name="role"
 											class="form-select shadow-none border-0  form-control-line">
@@ -126,14 +125,18 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				<div class="modal-body">
-					<c:forEach items="${errors}" var="error">
-						<%-- do want you want with ${error} --%>
-						<div>${error.defaultMessage}</div>
-					</c:forEach>
+				<div class="modal-body row">
+					<img width="100" class="col-2"
+						src="${resourcePath }/images/warning.png" />
+					<div class="col-10">
+						<c:forEach items="${errors}" var="error">
+							<%-- do want you want with ${error} --%>
+							<div>${error.defaultMessage}</div>
+						</c:forEach>
+					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger"
+					<button type="button" class="btn modal-btn"
 						data-bs-dismiss="modal">OK</button>
 				</div>
 			</div>

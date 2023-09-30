@@ -114,3 +114,15 @@ table {
 	padding: 5px !important;
 	border: 2px solid #404040 !important;
 }
+
+.modal-footer {
+	background-color: #f8f4f4;
+}
+
+.modal-btn {
+	background-color: #e1e1e1;
+	color: black;
+	border: 2px solid #5fa5dd;
+	padding-left: 5%;
+	padding-right: 5%;
+}

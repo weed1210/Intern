@@ -76,6 +76,7 @@ public class AddMemberController {
 		// Set the information for confirm page
 		model.addAttribute("member", member);
 		model.addAttribute("title", "会員を登録します");
+		model.addAttribute("prompt", "この内容でよろしければ、「登録」ボタンをクリックしてください。");
 		model.addAttribute("confirmAction", "confirmRegister");
 		model.addAttribute("cancelAction", "cancelRegister");
 		return "confirm";
