@@ -31,10 +31,31 @@ public class HomeController {
 	private final MemberService memberService;
 	private int pageSize = 5;
 
+	/**
+	 * @param memberService
+	 */
 	public HomeController(MemberService memberService) {
 		this.memberService = memberService;
 	}
 
+	/**
+	 * Handles requests to the root URL ("/") of the application.
+	 *
+	 * This method performs a search operation based on the provided query
+	 * parameters and paginates the results for display on the "index" page. Set the
+	 * search string to session
+	 *
+	 * @param model        The ModelMap object used to add attributes for rendering
+	 *                     the view.
+	 * @param searchString An optional query parameter for specifying the search
+	 *                     string (default: empty string).
+	 * @param page         An optional query parameter for specifying the page
+	 *                     number (default: 1).
+	 * @param session      The HttpSession object for maintaining session data.
+	 * @return The name of the view template to be rendered ("index").
+	 * @throws IOException If there is an error while interacting with external
+	 *                     services.
+	 */
 	@GetMapping("/")
 	public String index(ModelMap model,
 			@RequestParam("searchString") Optional<String> searchString,
@@ -70,17 +91,38 @@ public class HomeController {
 			paginatedMember = new PageImpl<Member>(new ArrayList<Member>());
 			model.addAttribute("serverError",
 					"サーバーに接続できません");
-		} 
+		}
 
 		model.addAttribute("members", paginatedMember);
 		return "index";
 	}
 
+	/**
+	 * Handles requests to the "/login" URL, displaying the login page.
+	 *
+	 * This method is responsible for rendering the login page when users navigate
+	 * to the "/login" URL.
+	 *
+	 * @return The name of the view template to be rendered ("login").
+	 */
 	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
 
+	/**
+	 * Handles successful authentication and session initialization after a user
+	 * logs in.
+	 *
+	 * This method is responsible for processing successful authentication and
+	 * initializing the user's session with relevant information such as
+	 * authentication tokens, email, and role.
+	 *
+	 * @param authentication The Authentication object containing user
+	 *                       authentication details.
+	 * @param session        The HttpSession object for storing session attributes.
+	 * @return A redirection to the root URL ("/") after successful authentication.
+	 */
 	@GetMapping("/login-sucess")
 	public String authenticate(Authentication authentication,
 			HttpSession session) {
@@ -102,13 +144,27 @@ public class HomeController {
 		return "redirect:/";
 	}
 
+	/**
+	 * This method is responsible for processing failed login attempts and
+	 * displaying an error message to the user on the login page.
+	 *
+	 * @param model The ModelMap object used to add attributes for rendering the
+	 *              view.
+	 * @return The name of the view template to be rendered ("login").
+	 */
 	@GetMapping("/login-error")
 	public String loginError(ModelMap model) {
 		System.out.println("Login fail");
 		model.addAttribute("loginError", "ログインIDまたはパスワードが間違っています。");
 		return "login";
 	}
-	
+
+	/**
+	 * This method is responsible for rendering a success page after the user has
+	 * successfully authenticated and logged in.
+	 *
+	 * @return The name of the view template to be rendered ("success").
+	 */
 	@GetMapping("/success")
 	public String success() {
 		return "success";

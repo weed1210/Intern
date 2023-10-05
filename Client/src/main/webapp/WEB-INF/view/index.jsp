@@ -70,7 +70,7 @@
 																<td>${fn:escapeXml(member.username) }</td>
 																<td>${fn:escapeXml(member.email) }</td>
 																<td>${member.phoneNumber.replaceFirst("(\\d{4})(\\d{3})(\\d+)", "$1-$2-$3") }</td>
-																<td>${member.role }</td>
+																<td>${member.displayRole() }</td>
 															</tr>
 														</c:if>
 													</c:forEach>

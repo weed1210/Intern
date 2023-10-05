@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import dxc.assignment.constant.MemberRole;
+import dxc.assignment.controller.HomeController;
 import dxc.assignment.helper.AuthHelper;
 import dxc.assignment.helper.EncoderHelper;
 import dxc.assignment.helper.ValidationHelper;
@@ -36,7 +37,21 @@ public class UpdateMemberController {
 		this.encoderHelper = encoderHelper;
 	}
 
-	// Go to the update page of member with id
+	/**
+	 * Displays the update page for a member with a specific ID.
+	 *
+	 * This method retrieves member information based on the provided ID and checks if the current user
+	 * has the necessary permissions to update the member's details. If authorized, it prepares the
+	 * update page with the member's information.
+	 *
+	 * @param id The ID of the member to update.
+	 * @param model The ModelMap object used to add attributes for rendering the view.
+	 * @param session The HttpSession object for maintaining session data.
+	 * @param redirectAttributes RedirectAttributes used for passing attributes when redirecting.
+	 * @return The name of the view template to be rendered ("update" or a redirection to the root URL).
+	 * @throws AuthException If the current user is not authorized to update a higher-level member.
+	 * @throws IOException If there is an error while interacting with external services.
+	 */
 	@GetMapping("/update/{id}")
 	public String update(@PathVariable int id, ModelMap model, HttpSession session,
 			RedirectAttributes redirectAttributes)
@@ -68,7 +83,17 @@ public class UpdateMemberController {
 		}
 	}
 
-	// Validate member field and redirect to confirmation
+	/**
+	 * Validates member fields and redirects to the confirmation page for updating.
+	 *
+	 * This method handles the form submission for updating a member. It validates the member's fields
+	 * and, if validation passes, sets the member in the session for confirmation.
+	 *
+	 * @param member The Member object with updated information.
+	 * @param bindingResult The BindingResult object to check for validation errors.
+	 * @param session The HttpSession object for storing session attributes.
+	 * @return A redirection to the confirmation page for updating or back to the "update" page in case of validation errors.
+	 */
 	@PostMapping("/update")
 	public String update(@Valid @ModelAttribute("member") Member member,
 			BindingResult bindingResult, HttpSession session) {
@@ -89,7 +114,16 @@ public class UpdateMemberController {
 		return "redirect:/confirmUpdate";
 	}
 
-	// Display the confirmation page for updating member with id
+	/**
+	 * Displays the confirmation page for updating a member.
+	 *
+	 * This method prepares and displays the confirmation page with the member's information before
+	 * finalizing the update.
+	 *
+	 * @param session The HttpSession object for retrieving the editing member.
+	 * @param model The ModelMap object used to add attributes for rendering the view.
+	 * @return The name of the view template to be rendered ("confirm" or a redirection to the root URL).
+	 */
 	@GetMapping("/confirmUpdate")
 	public String confirmUpdate(HttpSession session, ModelMap model) {
 		// Try get the member from session
@@ -108,14 +142,34 @@ public class UpdateMemberController {
 		return "confirm";
 	}
 
-	// When user cancel the confirmation of updating process
+	/**
+	 * Cancels the confirmation of the updating process.
+	 *
+	 * This method is called when the user cancels the confirmation of updating a member's information.
+	 * It removes the editing member from the session and redirects back to the update page.
+	 *
+	 * @param id The ID of the member whose update confirmation is being canceled.
+	 * @param session The HttpSession object for managing session attributes.
+	 * @return A redirection to the update page for the specified member ID.
+	 */
 	@GetMapping("/cancelUpdate/{id}")
 	public String cancelUpdate(@PathVariable int id, HttpSession session) {
 		session.removeAttribute("editingMember");
 		return "redirect:/update/" + id;
 	}
 
-	// Update the member
+	/**
+	 * Finalizes the update of the member's information.
+	 *
+	 * This method handles the confirmation of updating a member's information. It encodes the new
+	 * member's password, sends the update request to the server, and handles success or failure
+	 * responses accordingly.
+	 *
+	 * @param member The Member object with updated information.
+	 * @param session The HttpSession object for managing session attributes.
+	 * @param redirectAttributes RedirectAttributes used for passing attributes when redirecting.
+	 * @return A redirection to the success page or back to the confirmation page in case of errors.
+	 */
 	@PostMapping("/confirmUpdate")
 	public String confirmUpdate(@ModelAttribute("member") Member member,
 			HttpSession session, RedirectAttributes redirectAttributes) {

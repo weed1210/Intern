@@ -31,7 +31,20 @@ public class DeleteMemberController {
 		this.memberService = memberService;
 	}
 
-	// Display the confirmation page for deleting
+	/**
+	 * Displays the confirmation page for deleting a member with a specific ID.
+	 *
+	 * This method retrieves member information based on the provided ID and checks if the current user
+	 * has the necessary permissions to delete the member. If authorized, it prepares the deletion confirmation page.
+	 *
+	 * @param id The ID of the member to delete.
+	 * @param model The ModelMap object used to add attributes for rendering the view.
+	 * @param session The HttpSession object for maintaining session data.
+	 * @param redirectAttributes RedirectAttributes used for passing attributes when redirecting.
+	 * @return The name of the view template to be rendered ("confirm" or a redirection to the root URL).
+	 * @throws AuthException If the current user is not authorized to delete a higher-level member.
+	 * @throws IOException If there is an error while interacting with external services.
+	 */
 	@GetMapping("/confirmDelete/{id}")
 	public String confirmDelete(@PathVariable int id, ModelMap model,
 			HttpSession session, RedirectAttributes redirectAttributes)
@@ -73,7 +86,17 @@ public class DeleteMemberController {
 		}
 	}
 
-	// Delete the member
+	/**
+	 * Deletes a member with the specified ID after confirmation.
+	 *
+	 * This method handles the confirmation of member deletion. It sends the delete request to the server
+	 * and handles success or failure responses accordingly.
+	 *
+	 * @param id The ID of the member to delete.
+	 * @param session The HttpSession object for managing session attributes.
+	 * @param redirectAttributes RedirectAttributes used for passing attributes when redirecting.
+	 * @return A redirection to the success page or back to the confirmation page in case of errors.
+	 */
 	@PostMapping("/confirmDelete/{id}")
 	public String confirmRegister(@Valid @PathVariable int id, HttpSession session,
 			RedirectAttributes redirectAttributes) {

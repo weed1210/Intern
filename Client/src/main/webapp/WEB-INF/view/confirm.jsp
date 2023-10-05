@@ -45,7 +45,7 @@
 									<tr class="form-group mb-4">
 										<td width="30%"><label class="col-md-12 p-0">名前</label></td>
 										<td width="70%"><input readonly name="username"
-											type="text" placeholder="Username"
+											type="text" style="background: #e3e9fd;"
 											value="${member.username }"
 											class="table-display p-0 border-0"></td>
 									</tr>
@@ -58,20 +58,18 @@
 									<tr class="form-group mb-4">
 										<td><label class="col-md-12 p-0">電話番号</label></td>
 										<td><input readonly name="phoneNumber" type="text"
-											placeholder="123 456 7890"
+											style="background: #e3e9fd;"
 											value="${member.phoneNumber.replaceFirst('(\\d{4})(\\d{3})(\\d+)', '$1-$2-$3') }"
-											class="table-display p-0 border-0" disabled> 
-											<input
-											readonly name="phoneNumber"
-											placeholder="123 456 7890"
-											value="${member.phoneNumber }"
+											class="table-display p-0 border-0" disabled> <input
+											readonly name="phoneNumber" value="${member.phoneNumber }"
 											class="table-display p-0 border-0" type="hidden"></td>
 
 									</tr>
 									<tr class="form-group mb-4">
 										<td><label class="col-md-12 p-0">役割</label></td>
-										<td><input readonly name="role" type="text"
-											placeholder="123 456 7890" value="${member.role }"
+										<td><input name="role" type="hidden"
+											value="${member.role }"> <input disabled readonly
+											value="${member.displayRole() }"
 											class="table-display p-0 border-0"></td>
 									</tr>
 								</table>

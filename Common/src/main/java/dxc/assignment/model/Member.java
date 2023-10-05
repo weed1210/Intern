@@ -1,4 +1,5 @@
 package dxc.assignment.model;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -92,5 +93,22 @@ public class Member {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String displayRole() {
+		String display = "";
+		switch (this.role) {
+		case "ROLE_ADMIN":
+			display = "Admin";
+			break;
+		case "ROLE_EDIT":
+			display = "Edit";
+			break;
+		case "ROLE_VIEW":
+			display = "View";
+			break;
+		}
+
+		return display;
 	}
 }

@@ -85,13 +85,13 @@
 										<select name="role"
 											class="form-select shadow-none border-0  form-control-line">
 											<c:if test="${memberRole.equals('ROLE_ADMIN') }">
-												<option>ROLE_ADMIN</option>
-												<option>ROLE_EDIT</option>
-												<option>ROLE_VIEW</option>
+												<option value="ROLE_ADMIN">Admin</option>
+												<option value="ROLE_EDIT">Edit</option>
+												<option value="ROLE_VIEW">View</option>
 											</c:if>
 											<c:if test="${memberRole.equals('ROLE_EDIT') }">
-												<option>ROLE_EDIT</option>
-												<option>ROLE_VIEW</option>
+												<option value="ROLE_EDIT">Edit</option>
+												<option value="ROLE_VIEW">View</option>
 											</c:if>
 										</select>
 									</div>
@@ -136,8 +136,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn modal-btn"
-						data-bs-dismiss="modal">OK</button>
+					<button type="button" class="btn modal-btn" data-bs-dismiss="modal">OK</button>
 				</div>
 			</div>
 		</div>
