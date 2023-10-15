@@ -96,13 +96,13 @@
 										</select>
 									</div>
 								</div>
-								<div class="form-group mb-4">
-									<div class="d-flex justify-content-center">
+								<div class="form-group mb-4 row">
+									<div class="offset-sm-2 col-sm-10 d-flex justify-content-center row">
 										<div class="upgrade-btn d-flex justify-content-center col-6">
-											<a href="${contextPath }/" class="btn">戻る</a>
+											<a href="${contextPath }/" class="btn" style="width: 120px">戻る</a>
 										</div>
 										<div class="d-flex justify-content-center col-6">
-											<button class="btn">確認</button>
+											<button class="btn" style="width: 120px">確認</button>
 										</div>
 									</div>
 								</div>
@@ -121,7 +121,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">サーバーがエラーを返しました。</h5>
+					<h5 class="modal-title" id="exampleModalLabel">Web ページからのメッセージ</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>

@@ -34,26 +34,28 @@
 							<form action="${contextPath }/login"
 								class="form-horizontal form-material" method="post">
 								<div class="form-group mb-4 row">
-									<label class="col-md-2 p-0 text-start box-title">ログインID</label>
-									<div class="col-md-10">
+									<div class="col-md-2"></div>
+									<label class="col-md-3 p-0 text-start box-title">ログインID</label>
+									<div class="col-md-5">
 										<input name="username" type="text"
 											class="form-control p-0 border-0" /> <br />
 									</div>
 								</div>
 								<div class="form-group mb-4 row">
+									<div class="col-md-2"></div>
 									<label for="example-email"
-										class="col-md-2 p-0 text-start box-title">パスワード</label>
-									<div class="col-md-10">
+										class="col-md-3 p-0 text-start box-title">パスワード</label>
+									<div class="col-md-5">
 										<input name="password" type="password"
 											class="form-control p-0 border-0" /> <br />
 									</div>
 								</div>
-								<div class="form-group mb-4">
-									<div class="d-flex justify-content-center">
-										<div class="upgrade-btn d-flex justify-content-center col-5">
-											<button type="submit" style="width: 100%"
-												class="btn submit px-3">ログイン</button>
-										</div>
+								<div class="form-group mb-4 row">
+									<div class="col-md-2"></div>
+									<div class="col-md-3"></div>
+									<div class="upgrade-btn col-md-5">
+										<button type="submit" style="width: 100%"
+											class="btn submit px-3">ログイン</button>
 									</div>
 								</div>
 							</form>

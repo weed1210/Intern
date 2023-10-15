@@ -33,25 +33,28 @@
 					<div class="row">
 						<div class="col-2"></div>
 						<div class="box-title prompt col-6 ms-4">
-							<form:errors class="text-danger" path="username" /> <br />
-							<form:errors class="text-danger" path="email" /> <br />
-							<form:errors class="text-danger" path="phoneNumber" /> <br />
+							<form:errors class="text-danger" path="username" />
+							<br />
+							<form:errors class="text-danger" path="email" />
+							<br />
+							<form:errors class="text-danger" path="phoneNumber" />
+							<br />
 						</div>
 					</div>
 					<div class="card">
 						<div class="card-body">
 							<div class="col-lg-12 col-xlg-12 col-md-12">
 								<div class="form-group mb-4 row">
-									<label class="col-md-2 p-0 text-start box-title">ID</label>
-									<div class="col-md-10">
+									<label class="col-md-3 text-start box-title">ID</label>
+									<div class="col-md-9">
 										<input name="id" readonly type="text" value="${member.id }"
 											class="form-control p-0 border-0 readonly" /> <br />
 									</div>
 								</div>
 								<div class="form-group mb-4 row">
-									<label class="col-md-2 p-0 text-start box-title">名前 <span
+									<label class="col-md-3 text-start box-title">名前 <span
 										class="compulsary">*</span></label>
-									<div class="col-md-10">
+									<div class="col-md-9">
 										<form:input path="username" type="text"
 											value="${member.username }" class="form-control p-0 border-0" />
 										<br />
@@ -59,10 +62,10 @@
 								</div>
 								<div class="form-group mb-4 row">
 									<label for="example-email"
-										class="col-md-2 p-0 text-start box-title">メール <span
+										class="col-md-3 text-start box-title">メール <span
 										class="compulsary">*</span>
 									</label>
-									<div class="col-md-10">
+									<div class="col-md-9">
 										<form:input path="email" type="email" value="${member.email }"
 											class=" form-control p-0 border-0" />
 										<br />
@@ -71,9 +74,9 @@
 								<form:input path="password" type="password" hidden="hidden"
 									placeholder="12345678" />
 								<div class="form-group mb-4 row">
-									<label class="col-md-2 p-0 text-start box-title">電話番号 <span
+									<label class="col-md-3 text-start box-title">電話番号 <span
 										class="compulsary">*</span></label>
-									<div class="col-md-10">
+									<div class="col-md-9">
 										<form:input path="phoneNumber" type="text"
 											value="${member.phoneNumber }"
 											class="form-control p-0 border-0" />
@@ -81,30 +84,35 @@
 									</div>
 								</div>
 								<div class="form-group mb-4 row">
-									<label class="col-sm-2 p-0 text-start box-title">役割</label>
-									<div class="col-sm-10">
+									<label class="col-md-3 text-start box-title">役割</label>
+									<div class="col-md-9">
 										<select name="role"
 											class="form-select shadow-none p-0 border-0 form-control-line">
 											<c:if test="${memberRole.equals('ROLE_ADMIN') }">
-												<option ${member.role.equals('ROLE_ADMIN')? 'selected': '' } value="ROLE_ADMIN">Admin</option>
+												<option ${member.role.equals('ROLE_ADMIN')? 'selected': '' }
+													value="ROLE_ADMIN">Admin</option>
 											</c:if>
-											<option ${member.role.equals('ROLE_EDIT')? 'selected': '' } value="ROLE_EDIT">Edit</option>
-											<option ${member.role.equals('ROLE_VIEW')? 'selected': '' } value="ROLE_VIEW">View</option>
+											<option ${member.role.equals('ROLE_EDIT')? 'selected': '' }
+												value="ROLE_EDIT">Edit</option>
+											<option ${member.role.equals('ROLE_VIEW')? 'selected': '' }
+												value="ROLE_VIEW">View</option>
 										</select>
 									</div>
 								</div>
-								<div class="form-group mb-4">
-									<div class="d-flex justify-content-center">
-										<div class="upgrade-btn d-flex justify-content-center col-4">
-											<a href="${contextPath }/" class="btn">戻る</a>
+								<div class="form-group mb-4 row">
+									<div
+										class="offset-md-3 col-md-9 d-flex">
+										<div class="upgrade-btn d-flex col-4"
+											style="padding: 0">
+											<a href="${contextPath }/" class="btn" style="width: 120px">戻る</a>
 										</div>
-										<div class="d-flex justify-content-center col-4">
+										<div class="d-flex justify-content-center col-4 p-0">
 											<button
 												formaction="${contextPath }/confirmDelete/${member.id}"
-												formmethod="get" class="btn">削除</button>
+												formmethod="get" class="btn" style="width: 120px">削除</button>
 										</div>
-										<div class="d-flex justify-content-center col-4">
-											<button class="btn">更新</button>
+										<div class="d-flex justify-content-end col-4 p-0">
+											<button class="btn" style="width: 120px">更新</button>
 										</div>
 									</div>
 								</div>

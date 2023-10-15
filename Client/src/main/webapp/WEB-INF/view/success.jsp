@@ -37,7 +37,7 @@
 			<div class="error-body text-center">
 				<h1 class="box-title" style="color: red;">${successMessage }</h1>
 				<a href="${contextPath }/"
-					class="btn btn-rounded waves-effect waves-light mt-5">OK</a>
+					class="btn btn-rounded waves-effect waves-light mt-5" style="width: 120px">OK</a>
 			</div>
 		</div>
 		<!-- ============================================================== -->

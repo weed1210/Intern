@@ -29,7 +29,7 @@
 		data-sidebartype="full" data-sidebar-position="absolute"
 		data-header-position="absolute" data-boxed-layout="full">
 		<c:import url="layout/indexHeader.jsp" />
-		<div class="page-wrapper">
+		<div class="page-wrapper mt-5">
 			<div class="container-fluid" style="height: 91vh;">
 				<!-- ============================================================== -->
 				<!-- Start Page Content -->
@@ -41,8 +41,8 @@
 							<div class="row mb-3">
 								<form action="${contextPath }/" id="search_form">
 									<input type="text" name="searchString" value="${searchString }"
-										class="search-input col-2">
-									<button class="btn col-1">検索</button>
+										class="search-input col-md-5">
+									<button class="btn col-md-1" style="width: 150px">検索</button>
 								</form>
 							</div>
 							<div class="table-responsive">
@@ -59,31 +59,47 @@
 												</tr>
 											</thead>
 											<tbody>
-												<c:if test="${!memberRole.contains('ROLE_VIEW') }">
-													<c:forEach var="member" items="${members.content}"
-														varStatus="status">
-														<c:if
-															test="${memberRole.contains('ROLE_ADMIN') || memberRole.contains('ROLE_EDIT') && !member.role.contains('ROLE_ADMIN') }">
-															<tr>
-																<td><a href="${contextPath }/update/${member.id }">
+												<c:forEach var="member" items="${members.content}"
+													varStatus="status">
+													<tr>
+														<c:choose>
+															<c:when
+																test="${memberRole.contains('ROLE_ADMIN') || memberRole.contains('ROLE_EDIT') && !member.role.contains('ROLE_ADMIN') }">
+																<td
+																	style="text-align: center; text-decoration: underline #2cabe3"><a
+																	href="${contextPath }/update/${member.id }">
 																		${status.index+1 + members.size*members.number } </a></td>
-																<td>${fn:escapeXml(member.username) }</td>
-																<td>${fn:escapeXml(member.email) }</td>
-																<td>${member.phoneNumber.replaceFirst("(\\d{4})(\\d{3})(\\d+)", "$1-$2-$3") }</td>
-																<td>${member.displayRole() }</td>
-															</tr>
-														</c:if>
-													</c:forEach>
-												</c:if>
+															</c:when>
+															<c:otherwise>
+																<td style="text-align: center">${status.index+1 + members.size*members.number }</td>
+															</c:otherwise>
+														</c:choose>
+														<td>${fn:escapeXml(member.username) }</td>
+														<td>${fn:escapeXml(member.email) }</td>
+														<td>${member.phoneNumber.replaceFirst("(\\d{4})(\\d{3})(\\d+)", "$1-$2-$3") }</td>
+														<td>${member.displayRole() }</td>
+													</tr>
+												</c:forEach>
 											</tbody>
 										</table>
 										<div class="container pagination-container">
 											<ul class="pagination justify-content-end pagination-sm">
-												<c:if test="${members.totalPages > 0}">
+												<c:if test="${members.totalPages == 1}">
+													<li class="page-item active"><a
+														href="<c:url value='/'>
+											                        <c:param name="page" value="1" />
+																	<c:if test="${not empty searchString }">
+																		<c:param name="searchString" value="${searchString}" />
+																	</c:if>
+											                    </c:url>"
+														class="page-link"> <c:out value="1" />
+													</a></li>
+												</c:if>
+												<c:if test="${members.totalPages > 1}">
 													<c:forEach var="pageNumber" begin="1"
 														end="${members.totalPages}">
 														<!-- First three page, no previous button -->
-														<c:if test="${currentPage <= halfPage }">
+														<c:if test="${currentPage <= halfPage}">
 															<!-- Display first 5 page -->
 															<c:if test="${pageNumber <= maxPage }">
 																<c:set var="isActive"
@@ -100,7 +116,7 @@
 															</c:if>
 															<!-- Page 6 will become next button -->
 															<c:if
-																test="${pageNumber == 1+maxPage && pageNumber < members.totalPages }">
+																test="${pageNumber == 1+maxPage && pageNumber <= members.totalPages }">
 																<li class="page-item ${isActive ? 'active' : ''}"><a
 																	href="<c:url value='/'>
 											                        <c:param name="page" value="${currentPage+1}" />
@@ -156,7 +172,7 @@
 														</c:if>
 														<!-- Last 5 page -->
 														<c:if
-															test="${currentPage > members.totalPages - halfPage }">
+															test="${currentPage > members.totalPages - halfPage && members.totalPages > halfPage }">
 															<c:if
 																test="${pageNumber > members.totalPages - maxPage }">
 																<c:set var="isActive"

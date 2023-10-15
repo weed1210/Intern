@@ -7,19 +7,11 @@
 <c:set var="resourcePath" value="${contextPath }/resources" />
 <c:set var="searchString" value="${sessionScope.searchString }" />
 
-<header class="topbar" data-navbarbg="skin5" style="padding-bottom: 10%">
-	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
-		<div class="navbar-collapse collapse row" id="navbarSupportedContent"
-			data-navbarbg="skin5">
-			<div class="col-2"></div>
-			<div class="col-5 ms-5 box-title">ログインID及びパスワードを入力して下さい。</div>
-		</div>
-	</nav>
-	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
-		<div class="navbar-collapse collapse row" id="navbarSupportedContent"
-			data-navbarbg="skin5">
-			<div class="col-2"></div>
-			<div class="col-5 ms-5 box-title" style="color: red;">${param.loginError }</div>
-		</div>
-	</nav>
+<header class="topbar" data-navbarbg="skin5" style="padding-top: 20px">
+	<div class="row" style="min-height: 35px">
+		<div class="offset-sm-3 box-title">ログインID及びパスワードを入力して下さい。</div>
+	</div>
+	<div class="row" style="min-height: 35px">
+		<div class="offset-sm-3" style="color: red; font-weight: 400">${param.loginError }</div>
+	</div>
 </header>

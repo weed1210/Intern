@@ -7,20 +7,22 @@
 <c:set var="resourcePath" value="${contextPath }/resources" />
 <c:set var="searchString" value="${sessionScope.searchString }" />
 
-<header class="topbar" data-navbarbg="skin5">
-	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
-		<div class="navbar-collapse collapse row" id="navbarSupportedContent"
-			data-navbarbg="skin5">
-			<div class="col-2"></div>
-			<div class="col-2 ms-5 box-title">${param.pageHeader }</div>
-			<div class="col-4"></div>
+<header data-navbarbg="skin5" style="padding-top: 20px">
+	<div>
+		<div class="row" data-navbarbg="skin5">
+			<div class="col-md-2 col-sm-1"></div>
+			<div class="col-md-3 col-sm-3 ms-5 box-title">${param.pageHeader }</div>
+			<div class="col-md-3 col-sm-3"></div>
 			<!-- ============================================================== -->
 			<!-- Right side toggle and nav items -->
 			<!-- ============================================================== -->
-			<ul class="navbar-nav ms-auto d-flex col-2 ms-5">
-				<li class="text-center p-20 upgrade-btn"><a
-					href="${contextPath }/logout" class="btn d-grid" target="_blank">ログアウト</a></li>
-			</ul>
+			<div
+				class="ms-auto offset-sm-3 offset-xs-0 col-xs-4 col-sm-3 col-md-2 me-5"
+				style="width: 200px">
+				<div class="text-center upgrade-btn">
+					<a href="${contextPath }/logout" class="btn d-grid">ログアウト</a>
+				</div>
+			</div>
 		</div>
-	</nav>
+	</div>
 </header>

@@ -152,7 +152,7 @@ public class AddMemberController {
 			Response<Void> response = memberService.insert(member, authHeader);
 			if (response.isSuccessful()) {
 				redirectAttributes.addFlashAttribute("successMessage",
-						UIConstant.ERROR_PAGE_MESSAGE);
+						UIConstant.ADD_MEMBER_SUCCESS);
 				return "redirect:/success";
 			} else {
 				// On server return error

@@ -7,24 +7,27 @@
 <c:set var="resourcePath" value="${contextPath }/resources" />
 <c:set var="searchString" value="${sessionScope.searchString }" />
 
-<header class="topbar" data-navbarbg="skin5">
-	<nav class="navbar top-navbar navbar-expand-md navbar-dark">
-		<div class="navbar-collapse collapse row" id="navbarSupportedContent"
-			data-navbarbg="skin5">
-			<div class="col-1 box-title ms-5">新規会員追加</div>
-			<div class="col-1">
+<header class="topbar" data-navbarbg="skin5" style="padding-top: 20px">
+	<div>
+		<div class="row">
+			<div class="col-md-2 col-sm-3 col-xs-4 box-title ms-4">
+				<c:if test="${!memberRole.equals('ROLE_VIEW') }">新規会員追加</c:if>
+			</div>
+			<div class="col-sm-2 col-xs-3" style="width: 150px">
 				<c:if test="${!memberRole.equals('ROLE_VIEW') }">
 					<a href="${contextPath }/register" class="btn d-grid">追加</a>
 				</c:if>
 			</div>
-			<div class="col-6"></div>
 			<!-- ============================================================== -->
 			<!-- Right side toggle and nav items -->
 			<!-- ============================================================== -->
-			<ul class="navbar-nav ms-auto d-flex col-2 ms-5">
-				<li class="text-center p-20 upgrade-btn"><a
-					href="${contextPath }/logout" class="btn d-grid">ログアウト</a></li>
-			</ul>
+			<div
+				class="ms-auto offset-sm-3 offset-xs-0 col-xs-4 col-sm-3 col-md-2 me-5"
+				style="width: 200px">
+				<div class="text-center upgrade-btn">
+					<a href="${contextPath }/logout" class="btn d-grid">ログアウト</a>
+				</div>
+			</div>
 		</div>
-	</nav>
+	</div>
 </header>

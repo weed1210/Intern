@@ -2,6 +2,10 @@ table tr:nth-child(odd) td {
 	background-color: #e3e9fd;
 }
 
+.confirm-content td, th {
+	padding: 5px;
+}
+
 body {
 	background-color: #f2f2f2 !important;
 }
@@ -9,6 +13,7 @@ body {
 thead {
 	color: #23507a;
 	background-color: #d6dce5;
+	text-align: center;
 }
 
 table {
@@ -68,6 +73,7 @@ table {
 .search-input {
 	border: 2px solid black !important;
 	border-radius: 5% !important;
+	padding: 6px;
 }
 
 .box-title {
@@ -88,6 +94,7 @@ table {
 
 .page-link {
 	background-color: #f2f2f2;
+	font-size: 15px !important;
 }
 
 .page-item.active .page-link {

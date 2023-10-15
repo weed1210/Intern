@@ -26,14 +26,14 @@
 			<c:param name="pageHeader" value="${title }" />
 		</c:import>
 		<div class="page-wrapper">
+			<div class="row">
+				<div class="col-2"></div>
+				<p class="box-title prompt col-6 ms-5">${prompt }</p>
+			</div>
 			<div class="container-fluid">
 				<div class="row">
-					<div class="row">
-						<div class="col-2"></div>
-						<p class="box-title prompt col-6 ms-4">${prompt }</p>
-					</div>
 					<div class="col-md-6 mx-auto">
-						<div>
+						<div class="confirm-content">
 							<form class="cform-horizontal form-material"
 								action="${contextPath }/${confirmAction }" method="post">
 								<input id="id" name="id" type="hidden" value="${member.id }"
@@ -78,10 +78,10 @@
 										<div class="d-flex justify-content-center">
 											<div class="d-flex justify-content-center col-6">
 												<button formaction="${contextPath }/${cancelAction }"
-													formmethod="get" class="btn">戻る</button>
+													formmethod="get" class="btn" style="width: 120px">戻る</button>
 											</div>
 											<div class="upgrade-btn d-flex justify-content-center col-6">
-												<button class="btn">${buttonConfirm }</button>
+												<button class="btn" style="width: 120px">${buttonConfirm }</button>
 											</div>
 										</div>
 									</div>
