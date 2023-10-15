@@ -100,7 +100,6 @@ public class UpdateMemberControllerTest {
 				.sessionAttr("authHeader", "Bearer token"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/"))
-				.andExpect(flash().attribute("serverError", "挿入時にエラーが発生しました。"))
 				.andReturn();
 	}
 

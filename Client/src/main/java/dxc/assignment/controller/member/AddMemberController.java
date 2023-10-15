@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 
 import dxc.assignment.constant.MemberRole;
 import dxc.assignment.helper.EncoderHelper;
+import dxc.assignment.helper.UIConstant;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.error.ApiError;
 import dxc.assignment.service.MemberService;
@@ -104,9 +105,9 @@ public class AddMemberController {
 
 		// Set the information for confirm page
 		model.addAttribute("member", member);
-		model.addAttribute("title", "会員を登録します");
-		model.addAttribute("buttonConfirm", "登録");
-		model.addAttribute("prompt", "この内容でよろしければ、「登録」ボタンをクリックしてください。");
+		model.addAttribute("title", UIConstant.ADD_MEMBER_TITLE);
+		model.addAttribute("buttonConfirm", UIConstant.ADD_MEMBER_BUTTON);
+		model.addAttribute("prompt", UIConstant.ADD_MEMBER_PROMPT);
 		model.addAttribute("confirmAction", "confirmRegister");
 		model.addAttribute("cancelAction", "cancelRegister");
 		return "confirm";
@@ -151,7 +152,7 @@ public class AddMemberController {
 			Response<Void> response = memberService.insert(member, authHeader);
 			if (response.isSuccessful()) {
 				redirectAttributes.addFlashAttribute("successMessage",
-						"登録が完了しました。");
+						UIConstant.ERROR_PAGE_MESSAGE);
 				return "redirect:/success";
 			} else {
 				// On server return error
@@ -161,14 +162,14 @@ public class AddMemberController {
 //				redirectAttributes.addFlashAttribute("confirmError",
 //						error.getResponse());
 				redirectAttributes.addFlashAttribute("confirmError",
-						"挿入中にエラーが発生しました。");
+						UIConstant.ADD_MEMBER_FAIL);
 				return "redirect:/confirmRegister";
 			}
 		} catch (IOException e) {
 			// On call to server fail
 			System.out.println(e);
 			redirectAttributes.addFlashAttribute("confirmError",
-					"サーバーに接続できません");
+					UIConstant.CALL_SERVER_FAIL);
 			return "redirect:/confirmRegister";
 		}
 	}

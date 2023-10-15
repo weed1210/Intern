@@ -20,6 +20,7 @@ import dxc.assignment.constant.MemberRole;
 import dxc.assignment.controller.HomeController;
 import dxc.assignment.helper.AuthHelper;
 import dxc.assignment.helper.EncoderHelper;
+import dxc.assignment.helper.UIConstant;
 import dxc.assignment.helper.ValidationHelper;
 import dxc.assignment.model.Member;
 import dxc.assignment.service.MemberService;
@@ -78,7 +79,7 @@ public class UpdateMemberController {
 			}
 		} catch (IOException e) {
 			redirectAttributes.addFlashAttribute("serverError",
-					"挿入時にエラーが発生しました。");
+					UIConstant.CALL_SERVER_FAIL);
 			return "redirect:/";
 		}
 	}
@@ -134,9 +135,9 @@ public class UpdateMemberController {
 
 		// Set the information for update page
 		model.addAttribute("member", member);
-		model.addAttribute("title", "会員を更新します。");
-		model.addAttribute("buttonConfirm", "OK");
-		model.addAttribute("prompt", "この内容でよろしければ、「OK」ボタンをクリックしてください。");
+		model.addAttribute("title", UIConstant.UPDATE_MEMBER_TITLE);
+		model.addAttribute("buttonConfirm", UIConstant.UPDATE_MEMBER_BUTTON);
+		model.addAttribute("prompt", UIConstant.UPDATE_MEMBER_PROMPT);
 		model.addAttribute("confirmAction", "confirmUpdate");
 		model.addAttribute("cancelAction", "cancelUpdate/" + member.getId());
 		return "confirm";
@@ -181,18 +182,18 @@ public class UpdateMemberController {
 			Response<Void> response = memberService.update(member, authHeader);
 			if (response.isSuccessful()) {
 				redirectAttributes.addFlashAttribute("successMessage",
-						"更新が完了しました。");
+						UIConstant.UPDATE_MEMBER_SUCCESS);
 				return "redirect:/success";
 			} else {
 				redirectAttributes.addFlashAttribute("confirmError",
-						"更新中にエラーが発生しました。");
+						UIConstant.UPDATE_MEMBER_FAIL);
 				return "redirect:/confirmUpdate";
 			}
 		} catch (IOException e) {
 			// On call to server fail
 			System.out.println(e);
 			redirectAttributes.addFlashAttribute("confirmError",
-					"サーバーに接続できません");
+					UIConstant.CALL_SERVER_FAIL);
 			return "redirect:/confirmUpdate";
 		}
 	}

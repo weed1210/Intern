@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import dxc.assignment.exception.ForbiddenException;
+import dxc.assignment.helper.UIConstant;
 
 // Get exception thrown by controller and return error page
 @ControllerAdvice
@@ -25,8 +26,8 @@ public class GlobalExceptionHandler {
 			throw ex;
 
 		ModelAndView modelAndView = new ModelAndView("error");
-		String error = "ERROR";
-		String instruction = "YOU SEEM TO BE TRYING TO FIND HIS WAY HOME";
+		String error = UIConstant.ERROR_PAGE_MESSAGE;
+		String instruction = UIConstant.ERROR_PAGE_INSTRUCTION;
 
 		modelAndView.addObject("error", error);
 		modelAndView.addObject("instruction", instruction);
@@ -37,8 +38,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AuthException.class)
 	public ModelAndView handleAuthException(AuthException ex) {
 		ModelAndView modelAndView = new ModelAndView("error");
-		String error = "ACCESS DENIED";
-		String instruction = "UNAUTHORIZE: YOU DONT HAVE THE PERMISSION TO ACCESS THIS FUNCTION";
+		String error = UIConstant.AUTH_ERROR_MESSAGE;
+		String instruction = UIConstant.AUTH_ERROR_INSTRUCTION;
 
 		modelAndView.addObject("error", error);
 		modelAndView.addObject("instruction", instruction);

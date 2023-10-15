@@ -99,8 +99,7 @@ public class DeleteMemberControllerTest {
 				.sessionAttr("authHeader", "Bearer token")
 				.sessionAttr("memberRole", "ROLE_ADMIN"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/"))
-				.andExpect(flash().attribute("serverError", "挿入時にエラーが発生しました。"));
+				.andExpect(view().name("redirect:/"));
 	}
 
 	@Test

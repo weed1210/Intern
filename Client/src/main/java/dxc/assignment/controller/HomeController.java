@@ -20,6 +20,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import dxc.assignment.helper.UIConstant;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.response.MemberSelectResponse;
 import dxc.assignment.security.CustomPrincipal;
@@ -90,7 +91,7 @@ public class HomeController {
 			// Empty paginated result
 			paginatedMember = new PageImpl<Member>(new ArrayList<Member>());
 			model.addAttribute("serverError",
-					"サーバーに接続できません");
+					UIConstant.CALL_SERVER_FAIL);
 		}
 
 		model.addAttribute("members", paginatedMember);
@@ -155,7 +156,7 @@ public class HomeController {
 	@GetMapping("/login-error")
 	public String loginError(ModelMap model) {
 		System.out.println("Login fail");
-		model.addAttribute("loginError", "ログインIDまたはパスワードが間違っています。");
+		model.addAttribute("loginError", UIConstant.LOGIN_FAIL_MESSAGE);
 		return "login";
 	}
 

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.gson.Gson;
 
 import dxc.assignment.constant.MemberRole;
+import dxc.assignment.helper.UIConstant;
 import dxc.assignment.model.Member;
 import dxc.assignment.model.error.ApiError;
 import dxc.assignment.service.MemberService;
@@ -68,9 +69,9 @@ public class DeleteMemberController {
 
 				// Set the information for delete confimation page
 				model.addAttribute("member", member);
-				model.addAttribute("title", "会員を削除します");
-				model.addAttribute("buttonConfirm", "OK");
-				model.addAttribute("prompt", "この内容でよろしければ、「OK」ボタンをクリックしてください。");
+				model.addAttribute("title", UIConstant.DELETE_MEMBER_TITLE);
+				model.addAttribute("buttonConfirm", UIConstant.DELETE_MEMBER_BUTTON);
+				model.addAttribute("prompt", UIConstant.DELETE_MEMBER_PROMPT);
 				model.addAttribute("confirmAction", "confirmDelete/" + member.getId());
 				model.addAttribute("cancelAction", "update/" + member.getId());
 				return "confirm";
@@ -81,7 +82,7 @@ public class DeleteMemberController {
 			}
 		} catch (IOException e) {
 			redirectAttributes.addFlashAttribute("serverError",
-					"挿入時にエラーが発生しました。");
+					UIConstant.CALL_SERVER_FAIL);
 			return "redirect:/";
 		}
 	}
